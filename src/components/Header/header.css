@@ -4,17 +4,27 @@ header{
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 60px;
+    height: 65px;
     background-color: #002069;
     padding: 10px;
 }
 
+header img{
+    width: 45px;
+}
+
 .logo {
+    display: flex;
+        /* Adicionado */
+        align-items: center;
+        /* Adicionado */
     text-decoration: none;
-    font-size: 30px;
+    font-size: 35px;
     cursor: pointer;
     color: #ffca03;
     font-weight: bold;
+    margin-left: 10px;
+    
 }
 
 .favoritos{
@@ -25,3 +35,4 @@ header{
     padding: 5px 14px;
     margin-right: 20px;
 }
+
