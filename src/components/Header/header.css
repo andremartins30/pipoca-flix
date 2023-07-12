@@ -16,7 +16,7 @@ header img{
 .logo {
     display: flex;
         /* Adicionado */
-        align-items: center;
+    align-items: center;
         /* Adicionado */
     text-decoration: none;
     font-size: 35px;
