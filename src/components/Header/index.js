@@ -9,7 +9,7 @@ const Header = () => {
     return (
         <header>
             <Link className='logo' to='/'><img src={icon} alt='icon' />PipocaFLIX</Link>
-            <Link className='favoritos' to='/favoritos'>Meus Filmes</Link>
+            {/* <Link className='favoritos' to='/favoritos'>Meus Filmes</Link> */}
         </header>
     )
 }
