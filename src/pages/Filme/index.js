@@ -33,11 +33,26 @@ const Filme = () => {
 
         loadFilme()
 
-        return () => {
-            console.log('COMPONENTE DESMONTADO')
-        }
+
     }, [navigate, id])
 
+    function salvarFilme() {
+        const minhaLista = localStorage.getItem("@pipocaflix")
+
+        let filmesSalvos = JSON.parse(minhaLista) || [];
+
+        const hasFilme = filmesSalvos.some( (filmesSalvo) => filmesSalvo.id === filme.id)
+
+        if(hasFilme){
+            alert("Esse filme esta na lista")
+            return
+        } 
+
+        filmesSalvos.push(filme)
+        localStorage.setItem("@pipocaflix", JSON.stringify(filmesSalvos))
+        alert("Filme salvo com sucesso")
+
+    }
 
     if(loading){
         return(
@@ -54,12 +69,13 @@ const Filme = () => {
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>
-
+            <strong>Gênero: {filme.genres.map((genre) => genre.name).join(', ')}</strong>
+            {/* O trecho acima mapeia o array 'genres' para exibir somente o nome de cada gênero, separados por vírgula */}
             <strong>Avaliação: {filme.vote_average.toFixed(1)} / 10</strong>
 
 
             <div className='area-buttons'>
-                <button> Salvar </button>
+                <button onClick={salvarFilme}> Salvar </button>
                 <button>
                     <a target="_blank" rel="external noreferrer" href={`https://youtube.com/results?search_query=${filme.title} Trailer`}>
                         Trailer
