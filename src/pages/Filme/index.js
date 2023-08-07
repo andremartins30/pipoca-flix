@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import './filme.css'
+import {toast} from 'react-toastify'
 
 
 const Filme = () => {
@@ -44,13 +45,13 @@ const Filme = () => {
         const hasFilme = filmesSalvos.some( (filmesSalvo) => filmesSalvo.id === filme.id)
 
         if(hasFilme){
-            alert("Esse filme esta na lista")
+            toast.warn("Este filme já está na sua lista!")
             return
         } 
 
         filmesSalvos.push(filme)
         localStorage.setItem("@pipocaflix", JSON.stringify(filmesSalvos))
-        alert("Filme salvo com sucesso")
+        toast.success("Filme salvo com sucessso!")
 
     }
 
