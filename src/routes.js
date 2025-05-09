@@ -1,22 +1,41 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom'
-import Home from './pages/Home'
-import Filme from './pages/Filme'
-import Erro from './pages/Erro'
-import Favoritos from './pages/Favoritos'
-
-
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect, lazy, Suspense } from 'react'
+import { Analytics } from './services/analytics'
 import Header from './components/Header'
-function RoutesApp(){
-    return(
-        <BrowserRouter>
-            <Header/>
-            <Routes>
-                <Route path='/' element={<Home/>}/>
-                <Route path='/filme/:id' element={<Filme />} />
-                <Route path='/favoritos' element={<Favoritos />} />
 
-                <Route path='*' element={<Erro />}/>
-            </Routes>
+// Lazy loading dos componentes
+const Home = lazy(() => import('./pages/Home'))
+const Filme = lazy(() => import('./pages/Filme'))
+const Erro = lazy(() => import('./pages/Erro'))
+const Favoritos = lazy(() => import('./pages/Favoritos'))
+
+// Componente de loading
+const Loading = () => <div>Carregando...</div>
+
+// Componente para rastrear mudanças de rota
+const PageTracker = () => {
+    const location = useLocation();
+
+    useEffect(() => {
+        Analytics.logPageView(location.pathname);
+    }, [location]);
+
+    return null;
+};
+
+function RoutesApp() {
+    return (
+        <BrowserRouter>
+            <Header />
+            <PageTracker />
+            <Suspense fallback={<Loading />}>
+                <Routes>
+                    <Route path='/' element={<Home />} />
+                    <Route path='/filme/:id' element={<Filme />} />
+                    <Route path='/favoritos' element={<Favoritos />} />
+                    <Route path='*' element={<Erro />} />
+                </Routes>
+            </Suspense>
         </BrowserRouter>
     )
 }
