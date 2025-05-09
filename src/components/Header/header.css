@@ -1,38 +1,87 @@
-
-header{
+header {
+    background-color: var(--white);
+    padding: 1rem 2rem;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    width: 100%;
-    height: 65px;
-    background-color: #002069;
-    padding: 10px;
-}
-
-header img{
-    width: 45px;
+    align-items: center;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .logo {
     display: flex;
-        /* Adicionado */
     align-items: center;
-        /* Adicionado */
     text-decoration: none;
-    font-size: 35px;
-    cursor: pointer;
-    color: #ffca03;
-    font-weight: bold;
-    margin-left: 10px;
-    
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: var(--transition);
 }
 
-.favoritos{
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 22px;
-    color: #ffca03;
-    padding: 5px 14px;
-    margin-right: 20px;
+.logo:hover {
+    color: var(--primary-color);
 }
 
+.logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.5rem;
+}
+
+.favoritos {
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: var(--transition);
+    border: 2px solid var(--primary-color);
+}
+
+.favoritos:hover {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    header {
+        padding: 0.8rem 1rem;
+    }
+
+    .logo {
+        font-size: 1.2rem;
+    }
+
+    .logo img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .favoritos {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 0.6rem 0.8rem;
+    }
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    .logo img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .favoritos {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
