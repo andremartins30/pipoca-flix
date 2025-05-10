@@ -69,7 +69,7 @@ const Filme = () => {
             <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            <AdSense adSlot="5678901234" />
+            <AdSense adSlot="2797177392" />
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>

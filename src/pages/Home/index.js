@@ -63,7 +63,7 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <AdSense adSlot="1234567890" />
+            <AdSense adSlot="2797177392" />
 
             <div className='lista-filmes'>
                 {filmes.map((filme) => (
@@ -83,7 +83,7 @@ const Home = () => {
                 ))}
             </div>
 
-            <AdSense adSlot="0987654321" format="fluid" style={{ display: 'block' }} />
+            <AdSense adSlot="2797177392" format="fluid" style={{ display: 'block' }} />
         </div>
     )
 }
