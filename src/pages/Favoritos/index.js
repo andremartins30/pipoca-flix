@@ -1,20 +1,19 @@
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import React from 'react'
 import { Link } from "react-router-dom"
 import "./favoritos.css"
-import {toast} from "react-toastify"
+import { toast } from "react-toastify"
 
-function Favoritos(){
+function Favoritos() {
     const [filmes, setFilmes] = useState([])
 
     useEffect(() => {
         const minhaLista = localStorage.getItem("@pipocaflix")
         setFilmes(JSON.parse(minhaLista) || [])
-
     }, [])
 
-    function excluirFilme(id){
-        let filtroFilmes = filmes.filter( (item) => {
+    function excluirFilme(id) {
+        let filtroFilmes = filmes.filter((item) => {
             return (item.id !== id)
         })
 
@@ -29,17 +28,17 @@ function Favoritos(){
 
             {filmes.length === 0 && <span>Você não possui nenhum filme salvo!</span>}
 
-            <ul>
+            <ul className="filmes-list">
                 {filmes.map((item) => {
-                return(
-                    <li key={item.id}>
-                        <span>{item.title}</span>
-                        <div>
-                            <Link to={`/filme/${item.id}`}>Ver Detalhes</Link>
-                            <button onClick={() => excluirFilme(item.id)}>Excluir</button>
-                        </div>
-                    </li>
-                )
+                    return (
+                        <li key={item.id} className="filme-item">
+                            <span>{item.title}</span>
+                            <div>
+                                <Link to={`/filme/${item.id}`}>Ver Detalhes</Link>
+                                <button onClick={() => excluirFilme(item.id)}>Excluir</button>
+                            </div>
+                        </li>
+                    )
                 })}
             </ul>
         </div>

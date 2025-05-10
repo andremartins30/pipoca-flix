@@ -75,7 +75,9 @@ const Home = () => {
                                 loading="lazy"
                             />
                         </div>
-                        <strong>{filme.title}</strong>
+                        <strong className={`filme-title ${document.body.dataset.theme === 'dark' ? 'dark-mode' : ''}`}>
+                            {filme.title}
+                        </strong>
                         <Link to={`/filme/${filme.id}`} className="btn-acessar">
                             <span>Ver Detalhes</span>
                         </Link>

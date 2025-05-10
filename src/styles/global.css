@@ -95,3 +95,8 @@ body {
         padding: 0 0.5rem;
     }
 }
+
+.dark-mode {
+    color: var(--white);
+    /* Cor branca para o modo escuro */
+}

@@ -14,7 +14,10 @@
 }
 
 .meus-filmes ul {
-    width: 720px;
+    width: 100%;
+    max-width: 720px;
+    padding: 0;
+    list-style: none;
 }
 
 .meus-filmes ul li {
@@ -23,6 +26,10 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
+    padding: 10px;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
 }
 
 .meus-filmes div {
@@ -35,4 +42,21 @@
     text-decoration: none;
     color: #020269;
     margin-right: 14px;
+}
+
+@media (max-width: 768px) {
+    .meus-filmes ul {
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .meus-filmes ul li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .meus-filmes div {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
