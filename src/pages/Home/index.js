@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import api from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
+import AdSense from '../../components/AdSense'
 import './home.css'
 
 const Home = () => {
@@ -62,6 +63,8 @@ const Home = () => {
 
     return (
         <div className='container'>
+            <AdSense adSlot="1234567890" />
+
             <div className='lista-filmes'>
                 {filmes.map((filme) => (
                     <article key={filme.id} className="filme-card">
@@ -79,11 +82,8 @@ const Home = () => {
                     </article>
                 ))}
             </div>
-            {loadingMore && (
-                <div className="loading-more">
-                    <div className="loading-spinner"></div>
-                </div>
-            )}
+
+            <AdSense adSlot="0987654321" format="fluid" style={{ display: 'block' }} />
         </div>
     )
 }

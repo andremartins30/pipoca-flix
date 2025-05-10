@@ -25,6 +25,8 @@ const ThemeToggle = () => {
         >
             <div className="toggle-track">
                 <div className="toggle-thumb"></div>
+                <div className="toggle-icon sun">☀️</div>
+                <div className="toggle-icon moon">🌙</div>
             </div>
         </button>
     )

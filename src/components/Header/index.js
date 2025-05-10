@@ -3,15 +3,14 @@ import './header.css'
 import { Link, useNavigate } from 'react-router-dom'
 import icon from './icon.png'
 import ThemeToggle from '../ThemeToggle'
+import SearchBar from '../SearchBar'
 
 const Header = () => {
-    const [searchTerm, setSearchTerm] = useState('')
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const menuRef = useRef(null)
     const navigate = useNavigate()
 
-    const handleSearch = (e) => {
-        e.preventDefault()
+    const handleSearch = (searchTerm) => {
         if (searchTerm.trim()) {
             navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`)
         }
@@ -34,19 +33,11 @@ const Header = () => {
             <div className="header-left">
                 <Link className='logo' to='/'>
                     <img src={icon} alt='icon' />
-                    <span>PipocaFLIX</span>
+                    <span className="site-title">PipocaFLIX</span>
                 </Link>
             </div>
 
-            <form onSubmit={handleSearch} className="search-form">
-                <input
-                    type="text"
-                    placeholder="Buscar filmes..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <button type="submit">Buscar</button>
-            </form>
+            <SearchBar onSearch={handleSearch} />
 
             <div className="header-right">
                 <ThemeToggle />

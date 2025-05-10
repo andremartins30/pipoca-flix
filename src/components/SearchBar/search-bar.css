@@ -1,0 +1,108 @@
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.search-icon-button {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.search-icon-button:hover {
+    background-color: var(--background-color);
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+    background-color: var(--white);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+}
+
+.search-container.expanded .search-form {
+    width: 300px;
+    padding: 0 8px 0 40px;
+}
+
+.search-input {
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+    width: 100%;
+    font-size: 1rem;
+    color: var(--text-color);
+    outline: none;
+}
+
+.search-submit {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.search-submit:hover {
+    background-color: var(--secondary-color);
+}
+
+@media (max-width: 768px) {
+    .search-container.expanded .search-form {
+        width: 240px;
+    }
+
+    .search-input {
+        font-size: 0.9rem;
+    }
+
+    .search-submit {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-container.expanded .search-form {
+        width: 200px;
+    }
+
+    .search-container.expanded {
+        position: static;
+    }
+
+    .search-container.expanded .search-form {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        width: 100%;
+        margin-top: 8px;
+        border-radius: 0;
+        padding: 8px 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+}

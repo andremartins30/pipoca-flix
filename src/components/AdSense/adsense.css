@@ -1,0 +1,19 @@
+.adsense-container {
+    display: block;
+    width: 100%;
+    min-height: 50px;
+    margin: 1.5rem auto;
+    overflow: hidden;
+    text-align: center;
+}
+
+.adsbygoogle-responsive {
+    display: block;
+}
+
+/* Estilo para o modo escuro */
+[data-theme='dark'] .adsense-container {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 0.5rem;
+}

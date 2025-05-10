@@ -54,22 +54,88 @@
     background-color: var(--secondary-color);
 }
 
-.loading {
+.loading,
+.error {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 200px;
+    font-size: 1.2rem;
     color: var(--text-color);
+    text-align: center;
+    padding: 2rem;
 }
 
 .error {
     color: #dc3545;
-    text-align: center;
-    padding: 2rem;
-    background-color: var(--white);
+    background-color: rgba(220, 53, 69, 0.1);
     border-radius: 8px;
     margin: 2rem auto;
     max-width: 600px;
+    box-shadow: var(--shadow);
+}
+
+.development-banner {
+    text-align: center;
+    padding: 3rem 2rem;
+    background-color: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin: 2rem auto;
+    max-width: 800px;
+    color: var(--text-color);
+}
+
+.development-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    animation: pulse 2s infinite;
+}
+
+.development-banner h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.development-banner p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.location-info {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background-color: var(--background-color);
+    border-radius: 8px;
+    text-align: left;
+    display: inline-block;
+}
+
+.location-info h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.location-info p {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 @media (max-width: 768px) {
@@ -77,7 +143,19 @@
         padding: 1rem;
     }
 
-    .cinemas-list {
-        grid-template-columns: 1fr;
+    .development-banner {
+        padding: 2rem 1rem;
+    }
+
+    .development-icon {
+        font-size: 3rem;
+    }
+
+    .development-banner h2 {
+        font-size: 1.5rem;
+    }
+
+    .development-banner p {
+        font-size: 1rem;
     }
 }

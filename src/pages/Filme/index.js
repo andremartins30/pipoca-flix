@@ -3,33 +3,34 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import './filme.css'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
+import AdSense from '../../components/AdSense'
 
 
 const Filme = () => {
 
-    const {id} = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     const [filme, setFilmes] = useState({})
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        async function loadFilme(){
+        async function loadFilme() {
             await api.get(`/movie/${id}`, {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",
                 }
             })
-            .then((response) => {
-                setFilmes(response.data)
-                setLoading(false)
-                console.log(response)
-            }).catch(()=>{
+                .then((response) => {
+                    setFilmes(response.data)
+                    setLoading(false)
+                    console.log(response)
+                }).catch(() => {
 
-                navigate("/", {replace: true})
-                return;
-            })
+                    navigate("/", { replace: true })
+                    return;
+                })
         }
 
         loadFilme()
@@ -42,12 +43,12 @@ const Filme = () => {
 
         let filmesSalvos = JSON.parse(minhaLista) || [];
 
-        const hasFilme = filmesSalvos.some( (filmesSalvo) => filmesSalvo.id === filme.id)
+        const hasFilme = filmesSalvos.some((filmesSalvo) => filmesSalvo.id === filme.id)
 
-        if(hasFilme){
+        if (hasFilme) {
             toast.warn("Este filme já está na sua lista!")
             return
-        } 
+        }
 
         filmesSalvos.push(filme)
         localStorage.setItem("@pipocaflix", JSON.stringify(filmesSalvos))
@@ -55,18 +56,20 @@ const Filme = () => {
 
     }
 
-    if(loading){
-        return(
+    if (loading) {
+        return (
             <div className='filme-info'>
                 <h1> Carregando Detalhes...</h1>
             </div>
         )
-        }
+    }
 
     return (
         <div className='filme-info'>
             <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
+
+            <AdSense adSlot="5678901234" />
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>
