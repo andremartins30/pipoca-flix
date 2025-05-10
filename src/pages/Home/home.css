@@ -68,6 +68,11 @@ html[data-theme="dark"] .filme-card {
     line-height: 1.4;
 }
 
+/* Estilo para o modo escuro
+html[data-theme="dark"] .filme-card strong {
+    color: #fff !important;
+    /* Cor branca para o modo escuro com maior prioridade */
+
 .btn-acessar {
     margin-top: auto;
     padding: 0.8rem;

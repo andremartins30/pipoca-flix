@@ -65,11 +65,10 @@ const Filme = () => {
     }
 
     return (
-        <div className='filme-info'>
-            <h1>{filme.title}</h1>
+        <div className='filme-info'>            <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            <AdSense adSlot="2797177392" />
+            <AdSense adSlot="5678912345" />
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>

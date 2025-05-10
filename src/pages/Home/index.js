@@ -59,9 +59,7 @@ const Home = () => {
 
     if (loading) {
         return <Skeleton />
-    }
-
-    return (
+    } return (
         <div className='container'>
             <AdSense adSlot="2797177392" />
 
@@ -84,7 +82,7 @@ const Home = () => {
                 ))}
             </div>
 
-            <AdSense adSlot="2797177392" format="fluid" style={{ display: 'block' }} />
+            <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
         </div>
     )
 }
