@@ -7,6 +7,8 @@
     --white: #fff;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
+    --title-color: #000;
+    /* Nova variável para cor do título */
 }
 
 [data-theme="dark"] {
@@ -16,6 +18,8 @@
     --text-color: #fff;
     --white: #1e1e1e;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --title-color: #fff;
+    /* Nova variável para cor do título no modo dark */
 }
 
 * {

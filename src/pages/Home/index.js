@@ -74,8 +74,7 @@ const Home = () => {
                                 alt={filme.title}
                                 loading="lazy"
                             />
-                        </div>
-                        <strong className={`filme-title ${document.body.dataset.theme === 'dark' ? 'dark-mode' : ''}`}>
+                        </div>                        <strong className="filme-title">
                             {filme.title}
                         </strong>
                         <Link to={`/filme/${filme.id}`} className="btn-acessar">
