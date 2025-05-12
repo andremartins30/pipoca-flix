@@ -25,7 +25,6 @@ const Filme = () => {
                 .then((response) => {
                     setFilmes(response.data)
                     setLoading(false)
-                    console.log(response)
                 }).catch(() => {
 
                     navigate("/", { replace: true })
