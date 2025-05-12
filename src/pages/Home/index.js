@@ -6,16 +6,24 @@ import Skeleton from '../../components/Skeleton'
 import AdSense from '../../components/AdSense'
 import './home.css'
 
+const endpoints = {
+    now_playing: 'movie/now_playing',
+    popular: 'movie/popular',
+    top_rated: 'movie/top_rated',
+    upcoming: 'movie/upcoming',
+}
+
 const Home = () => {
     const [filmes, setFilmes] = useState([])
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
     const [loadingMore, setLoadingMore] = useState(false)
+    const [activeList, setActiveList] = useState('now_playing') // Estado para a lista ativa
 
-    const loadFilmes = useCallback(async (pageNumber) => {
+    const loadFilmes = useCallback(async (pageNumber, list) => {
         try {
-            const response = await api.get('movie/now_playing', {
+            const response = await api.get(endpoints[list], {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",
@@ -34,9 +42,9 @@ const Home = () => {
     }, [])
 
     useEffect(() => {
-        loadFilmes(1)
+        loadFilmes(1, activeList)
         setLoading(false)
-    }, [loadFilmes])
+    }, [loadFilmes, activeList])
 
     const handleScroll = useCallback(() => {
         if (loadingMore || !hasMore) return
@@ -48,14 +56,21 @@ const Home = () => {
         if (scrollTop + clientHeight >= scrollHeight - 100) {
             setLoadingMore(true)
             setPage(prev => prev + 1)
-            loadFilmes(page + 1)
+            loadFilmes(page + 1, activeList)
         }
-    }, [loadingMore, hasMore, page, loadFilmes])
+    }, [loadingMore, hasMore, page, loadFilmes, activeList])
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
         return () => window.removeEventListener('scroll', handleScroll)
     }, [handleScroll])
+
+    const handleBadgeClick = (list) => {
+        setActiveList(list)
+        setPage(1)
+        setFilmes([])
+        setLoading(true)
+    }
 
     if (loading) {
         return <Skeleton />
@@ -63,16 +78,37 @@ const Home = () => {
         <div className='container'>
             <AdSense adSlot="2797177392" />
 
+            <div className='badges'>
+                <button
+                    className={`badge ${activeList === 'now_playing' ? 'active' : ''}`}
+                    onClick={() => handleBadgeClick('now_playing')}
+                >Lançamentos</button>
+                <button
+                    className={`badge ${activeList === 'popular' ? 'active' : ''}`}
+                    onClick={() => handleBadgeClick('popular')}
+                >Populares</button>
+                <button
+                    className={`badge ${activeList === 'top_rated' ? 'active' : ''}`}
+                    onClick={() => handleBadgeClick('top_rated')}
+                >Mais bem avaliados</button>
+                <button
+                    className={`badge ${activeList === 'upcoming' ? 'active' : ''}`}
+                    onClick={() => handleBadgeClick('upcoming')}
+                >Em breve</button>
+            </div>
+
             <div className='lista-filmes'>
                 {filmes.map((filme) => (
                     <article key={filme.id} className="filme-card">
                         <div className="filme-poster">
+                            <span className="vote-average">{filme.vote_average.toFixed(1)}</span>
                             <img
                                 src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
                                 alt={filme.title}
                                 loading="lazy"
                             />
-                        </div>                        <strong className="filme-title">
+                        </div>
+                        <strong className="filme-title">
                             {filme.title}
                         </strong>
                         <Link to={`/filme/${filme.id}`} className="btn-acessar">

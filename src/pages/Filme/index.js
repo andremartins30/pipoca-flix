@@ -24,6 +24,7 @@ const Filme = () => {
             })
                 .then((response) => {
                     setFilmes(response.data)
+                    console.log(setFilmes)
                     setLoading(false)
                 }).catch(() => {
 
