@@ -144,13 +144,14 @@ html[data-theme="dark"] .filme-card strong {
 .badges {
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .badge {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
     font-weight: bold;
     color: var(--primary-color);
     background-color: transparent;
@@ -190,6 +191,11 @@ html[data-theme="dark"] .filme-card strong {
         padding: 0.6rem;
         font-size: 0.9rem;
     }
+
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.6rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -206,5 +212,10 @@ html[data-theme="dark"] .filme-card strong {
     .btn-acessar {
         padding: 0.5rem;
         font-size: 0.85rem;
+    }
+
+    .badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
     }
 }

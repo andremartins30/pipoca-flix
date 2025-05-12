@@ -101,7 +101,7 @@ const Home = () => {
                 {filmes.map((filme) => (
                     <article key={filme.id} className="filme-card">
                         <div className="filme-poster">
-                            <span className="vote-average">{filme.vote_average.toFixed(1)}</span>
+                            <span className="vote-average">{filme.vote_average.toFixed(2)}</span>
                             <img
                                 src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
                                 alt={filme.title}
