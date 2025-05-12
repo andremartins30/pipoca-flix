@@ -4,8 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import './filme.css'
 import { toast } from 'react-toastify'
-import AdSense from '../../components/AdSense'
-
+// import AdSense from '../../components/AdSense'
 
 const Filme = () => {
 
@@ -13,6 +12,7 @@ const Filme = () => {
     const navigate = useNavigate();
     const [filme, setFilmes] = useState({})
     const [loading, setLoading] = useState(true)
+    const [elenco, setElenco] = useState([]) // Estado para armazenar o elenco
 
     useEffect(() => {
         async function loadFilme() {
@@ -24,19 +24,32 @@ const Filme = () => {
             })
                 .then((response) => {
                     setFilmes(response.data)
-                    console.log(setFilmes)
                     setLoading(false)
                 }).catch(() => {
-
                     navigate("/", { replace: true })
                     return;
                 })
         }
 
+        async function loadElenco() {
+            await api.get(`/movie/${id}/credits`, {
+                params: {
+                    api_key: "45987c192cb22153a3fd72a71eee5003",
+                    language: "pt-BR",
+                }
+            })
+                .then((response) => {
+                    setElenco(response.data.cast.slice(0, 7)) // Limitando a 6 primeiros
+                }).catch((error) => {
+                    console.error("Erro ao carregar elenco:", error)
+                })
+        }
+
         loadFilme()
-
-
+        loadElenco()
     }, [navigate, id])
+
+
 
     function salvarFilme() {
         const minhaLista = localStorage.getItem("@pipocaflix")
@@ -68,7 +81,7 @@ const Filme = () => {
         <div className='filme-info'>            <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            <AdSense adSlot="5678912345" />
+            {/* <AdSense adSlot="5678912345" /> */}
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>
@@ -84,6 +97,20 @@ const Filme = () => {
                         Trailer
                     </a>
                 </button>
+            </div>
+
+
+            <div className='elenco'>
+                <h3>Elenco: </h3>
+                <div className='elenco-grid'>
+                    {elenco.map((ator) => (
+                        <div key={ator.id} className='ator-card'>
+                            <img src={`https://image.tmdb.org/t/p/w200${ator.profile_path}`} alt={ator.name} />
+                            <strong>{ator.name}</strong>
+                            <span>{ator.character}</span>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )
