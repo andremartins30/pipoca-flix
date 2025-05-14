@@ -15,10 +15,10 @@
     --primary-color: #4a90e2;
     --secondary-color: #1a237e;
     --background-color: #121212;
-    --text-color: #fff;
-    --white: #1e1e1e;
+    --text-color: #e0e0e0;
+    --white: #2a2a2a;
     --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --title-color: #fff;
+    --title-color: #ffffff;
     /* Nova variável para cor do título no modo dark */
 }
 

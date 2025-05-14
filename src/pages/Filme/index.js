@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import './filme.css'
 import { toast } from 'react-toastify'
+import SimilarMovies from '../../components/SimilarMovies'
 // import AdSense from '../../components/AdSense'
 
 const Filme = () => {
@@ -81,13 +82,18 @@ const Filme = () => {
         <div className='filme-info'>            <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            {/* <AdSense adSlot="5678912345" /> */}
-
-            <h3>Sinopse</h3>
+            {/* <AdSense adSlot="5678912345" /> */}            <h3>Sinopse</h3>
             <span>{filme.overview}</span>
             <strong>Gênero: {filme.genres.map((genre) => genre.name).join(', ')}</strong>
             {/* O trecho acima mapeia o array 'genres' para exibir somente o nome de cada gênero, separados por vírgula */}
-            <strong>Avaliação: {filme.vote_average.toFixed(1)} / 10</strong>
+
+            <div className="avaliacao">
+                <strong>Avaliação:</strong>
+                <div className="rating-badge">
+                    <span>{filme.vote_average.toFixed(1)}</span>
+                    <small>/10</small>
+                </div>
+            </div>
 
 
             <div className='area-buttons'>
@@ -98,6 +104,7 @@ const Filme = () => {
                     </a>
                 </button>
             </div>
+
 
 
             <div className='elenco'>
@@ -112,6 +119,15 @@ const Filme = () => {
                     ))}
                 </div>
             </div>
+
+            <div className='sugestoes'>
+                <h3>Filmes Similares:</h3>
+                <div className='sugestoes-grid'>
+                    <SimilarMovies movieId={filme.id} />
+                </div>
+            </div>
+
+
         </div>
     )
 }

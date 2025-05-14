@@ -1,10 +1,15 @@
 .filme-info {
-    margin: 0 auto;
+    margin: 0 0 0 32px;
+    /* Ajustado para alinhar à esquerda */
     margin-top: 18px;
     display: flex;
     flex-direction: column;
     max-width: 840px;
     padding: 0 8px;
+    align-items: flex-start;
+    /* Alinha o conteúdo à esquerda */
+    text-align: left;
+    /* Alinha os textos à esquerda */
 }
 
 .filme-info h1 {
