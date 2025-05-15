@@ -78,7 +78,7 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <AdSense adSlot="2797177392" />
+            {/* <AdSense adSlot="2797177392" /> */}
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
