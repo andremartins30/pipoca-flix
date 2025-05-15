@@ -74,9 +74,13 @@ const Home = () => {
 
     if (loading) {
         return <Skeleton />
-    } return (
+    }
+
+    return (
         <div className='container'>
             <AdSense adSlot="2797177392" />
+
+            <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
             <div className='badges'>
                 <button
@@ -97,7 +101,7 @@ const Home = () => {
                 >Em breve</button>
             </div>
 
-            <div className='lista-filmes'>
+            <div className="lista-filmes">
                 {filmes.map((filme) => (
                     <article key={filme.id} className="filme-card">
                         <div className="filme-poster">
@@ -117,6 +121,12 @@ const Home = () => {
                     </article>
                 ))}
             </div>
+
+            {loadingMore && (
+                <div className="loading-more">
+                    <div className="loading-spinner"></div>
+                </div>
+            )}
 
             <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
         </div>
