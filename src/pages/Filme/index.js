@@ -40,7 +40,7 @@ const Filme = () => {
                 }
             })
                 .then((response) => {
-                    setElenco(response.data.cast.slice(0, 7)) // Limitando a 6 primeiros
+                    setElenco(response.data.cast.slice(0, 8)) // Limitando a 6 primeiros
                 }).catch((error) => {
                     console.error("Erro ao carregar elenco:", error)
                 })
@@ -121,7 +121,6 @@ const Filme = () => {
             </div>
 
             <div className='sugestoes'>
-                <h3>Filmes Similares:</h3>
                 <div className='sugestoes-grid'>
                     <SimilarMovies movieId={filme.id} />
                 </div>

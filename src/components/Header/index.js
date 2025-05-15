@@ -37,9 +37,10 @@ const Header = () => {
                 </Link>
             </div>
 
-            <SearchBar onSearch={handleSearch} />
+
 
             <div className="header-right">
+                <SearchBar onSearch={handleSearch} />
                 <ThemeToggle />
 
                 <div className="menu-container" ref={menuRef}>

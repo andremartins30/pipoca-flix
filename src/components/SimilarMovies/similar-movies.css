@@ -14,13 +14,20 @@
     margin-bottom: 1.2rem;
 }
 
+/* Ajustando o layout das sugestões para exibir as imagens uma ao lado da outra */
 .similar-movies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 1rem;
 }
 
+/* Aumentando o tamanho dos cards */
 .similar-movie-card {
+    flex: 0 0 175px;
+    /* Define largura fixa maior para os cards */
+    max-width: 175px;
+    text-align: center;
     text-decoration: none;
     transition: transform 0.3s ease;
 }
@@ -32,8 +39,8 @@
 .similar-movie-card img {
     width: 100%;
     height: auto;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .similar-movie-card h4 {

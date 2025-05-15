@@ -73,18 +73,24 @@
 
 .elenco-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 0.5rem;
 }
 
+/* Ajustando o tamanho dos cards e garantindo que todos fiquem na mesma linha */
 .ator-card {
+    flex: 0 0 80px;
+    /* Define largura fixa menor para os cards */
+    max-width: 80px;
     text-align: center;
     background-color: var(--background-color);
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 0.3rem;
+    /* Reduz o padding */
     font-size: 0.8rem;
+    /* Ajusta o tamanho da fonte */
 }
 
 .ator-card img {
@@ -95,14 +101,18 @@
     filter: grayscale(100%);
 }
 
+/* Ajustando o estilo para exibir o nome completo do ator, quebrando a linha se necessário */
 .ator-card strong {
     display: block;
     font-size: 0.75rem;
     color: var(--title-color);
     margin-bottom: 0.2rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    /* Permite quebra de linha */
+    overflow: visible;
+    /* Exibe o texto completo */
+    text-overflow: unset;
+    /* Remove o truncamento com reticências */
 }
 
 .ator-card span {
@@ -111,4 +121,55 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+
+/* Ajustando o layout do elenco-grid para exibir em linha no modo desktop */
+@media (min-width: 768px) {
+    .elenco-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+/* Ajustando o layout do elenco-grid para ocupar duas colunas no modo responsivo */
+@media (max-width: 768px) {
+    .elenco-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+}
+
+/* Ajustando o layout das sugestões para exibir as imagens uma ao lado da outra */
+.sugestoes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+}
+
+.sugestoes-grid img {
+    width: 100px;
+    /* Define largura fixa para as imagens */
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Centralizando toda a página no modo responsivo */
+@media (max-width: 768px) {
+    .filme-info {
+        align-items: center;
+        text-align: left;
+        /* Alinha títulos e textos à esquerda */
+        margin-right: 18px;
+        /* Adiciona margem à direita */
+    }
+
+    .filme-info img {
+        margin: 0 auto;
+    }
 }
