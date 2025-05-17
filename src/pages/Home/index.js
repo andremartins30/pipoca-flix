@@ -7,7 +7,6 @@ import AdSense from '../../components/AdSense'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
 import AdsterraContainer from '../../components/AdsterraContainer'
-import SimilarMovies from '../../components/SimilarMovies'
 
 const endpoints = {
     now_playing: 'movie/now_playing',
@@ -121,11 +120,7 @@ const Home = () => {
                         <Link to={`/filme/${filme.id}`} className="btn-acessar">
                             <span>Ver Detalhes</span>
                         </Link>
-                        <div className='sugestoes'>
-                            <div className='sugestoes-grid'>
-                                <SimilarMovies movieId={filme.id} />
-                            </div>
-                        </div>
+
                     </article>
                 ))}
             </div>
