@@ -79,9 +79,13 @@
 
 .elenco-grid {
     display: grid;
+<<<<<<< HEAD
+    gap: 0.5rem;
+=======
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 1rem;
     width: 100%;
+>>>>>>> 1978499642e28774466b4534eaae7e3296817ace
 }
 
 .ator-card {
