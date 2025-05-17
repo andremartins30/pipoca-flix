@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
 import AdSense from '../../components/AdSense'
 import './home.css'
+import AdsterraBanner from '../../components/AdsterraBanner'
+import AdsterraContainer from '../../components/AdsterraContainer'
+import SimilarMovies from '../../components/SimilarMovies'
 
 const endpoints = {
     now_playing: 'movie/now_playing',
@@ -78,7 +81,7 @@ const Home = () => {
 
     return (
         <div className='container'>
-            {/* <AdSense adSlot="2797177392" /> */}
+            <AdsterraBanner />
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
@@ -118,6 +121,12 @@ const Home = () => {
                         <Link to={`/filme/${filme.id}`} className="btn-acessar">
                             <span>Ver Detalhes</span>
                         </Link>
+                        <div className='sugestoes'>
+                            <AdsterraContainer />
+                            <div className='sugestoes-grid'>
+                                <SimilarMovies movieId={filme.id} />
+                            </div>
+                        </div>
                     </article>
                 ))}
             </div>

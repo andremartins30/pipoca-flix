@@ -5,6 +5,7 @@ import api from '../../services/api'
 import './filme.css'
 import { toast } from 'react-toastify'
 import SimilarMovies from '../../components/SimilarMovies'
+import AdsterraContainer from '../../components/AdsterraContainer'
 // import AdSense from '../../components/AdSense'
 
 const Filme = () => {
@@ -79,10 +80,13 @@ const Filme = () => {
     }
 
     return (
-        <div className='filme-info'>            <h1>{filme.title}</h1>
+        <div className='filme-info'>
+            <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            {/* <AdSense adSlot="5678912345" /> */}            <h3>Sinopse</h3>
+            <AdsterraContainer />
+
+            <h3>Sinopse</h3>
             <span>{filme.overview}</span>
             <strong>Gênero: {filme.genres.map((genre) => genre.name).join(', ')}</strong>
             {/* O trecho acima mapeia o array 'genres' para exibir somente o nome de cada gênero, separados por vírgula */}
