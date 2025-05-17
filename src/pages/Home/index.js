@@ -122,7 +122,6 @@ const Home = () => {
                             <span>Ver Detalhes</span>
                         </Link>
                         <div className='sugestoes'>
-                            <AdsterraContainer />
                             <div className='sugestoes-grid'>
                                 <SimilarMovies movieId={filme.id} />
                             </div>
@@ -136,7 +135,8 @@ const Home = () => {
                     <div className="loading-spinner"></div>
                 </div>
             )}
-
+            <AdsterraContainer />
+            <AdsterraBanner />
             <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
         </div>
     )
