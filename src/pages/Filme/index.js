@@ -84,7 +84,7 @@ const Filme = () => {
             <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 
-            <AdsterraContainer />
+
 
             <h3>Sinopse</h3>
             <span>{filme.overview}</span>
@@ -129,6 +129,8 @@ const Filme = () => {
                     <SimilarMovies movieId={filme.id} />
                 </div>
             </div>
+
+            <AdsterraContainer />
 
 
         </div>

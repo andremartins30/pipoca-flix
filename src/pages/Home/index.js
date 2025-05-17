@@ -104,24 +104,32 @@ const Home = () => {
             </div>
 
             <div className="lista-filmes">
-                {filmes.map((filme) => (
-                    <article key={filme.id} className="filme-card">
-                        <div className="filme-poster">
-                            <span className="vote-average">{filme.vote_average.toFixed(2)}</span>
-                            <img
-                                src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
-                                alt={filme.title}
-                                loading="lazy"
-                            />
-                        </div>
-                        <strong className="filme-title">
-                            {filme.title}
-                        </strong>
-                        <Link to={`/filme/${filme.id}`} className="btn-acessar">
-                            <span>Ver Detalhes</span>
-                        </Link>
+                {filmes.map((filme, index) => (
+                    <React.Fragment key={filme.id}>
+                        <article className="filme-card">
+                            <div className="filme-poster">
+                                <span className="vote-average">{filme.vote_average.toFixed(2)}</span>
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
+                                    alt={filme.title}
+                                    loading="lazy"
+                                />
+                            </div>
+                            <strong className="filme-title">
+                                {filme.title}
+                            </strong>
+                            <Link to={`/filme/${filme.id}`} className="btn-acessar">
+                                <span>Ver Detalhes</span>
+                            </Link>
+                        </article>
 
-                    </article>
+                        {(index + 1) % 12 === 0 && (
+                            <>
+                                <AdsterraContainer />
+                                <AdsterraBanner />
+                            </>
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
 
