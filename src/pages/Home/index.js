@@ -58,7 +58,9 @@ const Home = () => {
 
     const renderPaginationButtons = () => {
         const buttons = [];
-        const maxVisiblePages = 5;
+        const isMobile = window.innerWidth <= 480;
+        const maxVisiblePages = isMobile ? 3 : 5;
+
         let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
 
@@ -74,28 +76,31 @@ const Home = () => {
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
             >
-                &lt;
+                {isMobile ? '&lt;' : 'Anterior'}
             </button>
         );
 
-        // Primeira página
-        if (startPage > 1) {
+        // Primeira página (não mostrar em mobile se não for a página atual)
+        if (!isMobile || startPage === 1) {
             buttons.push(
                 <button
                     key="1"
-                    className="pagination-btn"
+                    className={`pagination-btn ${page === 1 ? 'active' : ''}`}
                     onClick={() => handlePageChange(1)}
                 >
                     1
                 </button>
             );
-            if (startPage > 2) {
-                buttons.push(<span key="dots1" className="pagination-dots">...</span>);
-            }
+        }
+
+        // Reticências iniciais (apenas em desktop)
+        if (!isMobile && startPage > 2) {
+            buttons.push(<span key="dots1" className="pagination-dots">...</span>);
         }
 
         // Páginas do meio
         for (let i = startPage; i <= endPage; i++) {
+            if (i === 1 || i === totalPages) continue; // Pular primeira e última página
             buttons.push(
                 <button
                     key={i}
@@ -107,15 +112,17 @@ const Home = () => {
             );
         }
 
-        // Última página
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) {
-                buttons.push(<span key="dots2" className="pagination-dots">...</span>);
-            }
+        // Reticências finais (apenas em desktop)
+        if (!isMobile && endPage < totalPages - 1) {
+            buttons.push(<span key="dots2" className="pagination-dots">...</span>);
+        }
+
+        // Última página (não mostrar em mobile se não for a página atual)
+        if (!isMobile || endPage === totalPages) {
             buttons.push(
                 <button
                     key={totalPages}
-                    className="pagination-btn"
+                    className={`pagination-btn ${page === totalPages ? 'active' : ''}`}
                     onClick={() => handlePageChange(totalPages)}
                 >
                     {totalPages}
@@ -131,12 +138,23 @@ const Home = () => {
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
             >
-                &gt;
+                {isMobile ? '&gt;' : 'Próxima'}
             </button>
         );
 
         return buttons;
     };
+
+    // Adicionar listener para redimensionamento da janela
+    useEffect(() => {
+        const handleResize = () => {
+            // Força re-render quando a janela é redimensionada
+            setPage(prev => prev);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     if (loading) {
         return <Skeleton />

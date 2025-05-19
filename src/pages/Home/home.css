@@ -306,6 +306,7 @@ html[data-theme="dark"] .filme-card strong {
     display: flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -329,10 +330,50 @@ html[data-theme="dark"] .filme-card strong {
     color: var(--title-color);
     font-weight: bold;
     padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
 }
 
 .pagination-info {
     font-size: 1rem;
     color: var(--title-color);
     font-weight: 500;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .pagination {
+        gap: 0.3rem;
+        padding: 0.5rem;
+    }
+
+    .pagination-btn {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+        min-width: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination {
+        gap: 0.2rem;
+        padding: 0.5rem;
+        justify-content: center;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+        min-width: 32px;
+        height: 32px;
+    }
+
+    .pagination-dots {
+        display: none;
+    }
+
+    .pagination-btn:not(:first-child):not(:last-child) {
+        min-width: 28px;
+        padding: 0.4rem;
+    }
 }
