@@ -24,8 +24,12 @@ const AdsterraTopBanner = () => {
 
         // Limpa os scripts quando o componente for desmontado
         return () => {
-            document.body.removeChild(script);
-            document.body.removeChild(script2);
+            if (script.parentNode) {
+                document.body.removeChild(script);
+            }
+            if (script2.parentNode) {
+                document.body.removeChild(script2);
+            }
         };
     }, []);
 

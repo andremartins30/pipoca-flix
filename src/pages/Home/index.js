@@ -209,8 +209,12 @@ const Home = () => {
 
                         {(index + 1) % 7 === 0 && (
                             <>
-                                <AdsterraContainer />
-                                <AdsterraSideBanner />
+                                <div className="ad-container">
+                                    <AdsterraContainer />
+                                </div>
+                                <div className="ad-side-container">
+                                    <AdsterraSideBanner />
+                                </div>
                             </>
                         )}
                     </React.Fragment>
@@ -221,8 +225,12 @@ const Home = () => {
                 {renderPaginationButtons()}
             </div>
 
-            <AdsterraBanner />
-            <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
+            <div className="ad-bottom-container">
+                <AdsterraBanner />
+            </div>
+            <div className="ad-sense-container">
+                <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
+            </div>
         </div>
     )
 }

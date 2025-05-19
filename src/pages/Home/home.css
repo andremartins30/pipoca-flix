@@ -377,3 +377,52 @@ html[data-theme="dark"] .filme-card strong {
         padding: 0.4rem;
     }
 }
+
+/* Estilos para os containers de anúncios */
+.ad-container,
+.ad-side-container,
+.ad-bottom-container,
+.ad-sense-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.ad-container {
+    grid-column: 1 / -1;
+}
+
+.ad-side-container {
+    grid-column: 1 / -1;
+}
+
+.ad-bottom-container {
+    margin-top: 2rem;
+}
+
+.ad-sense-container {
+    margin-top: 1rem;
+}
+
+/* Media Queries para os containers de anúncios */
+@media (max-width: 768px) {
+
+    .ad-container,
+    .ad-side-container,
+    .ad-bottom-container,
+    .ad-sense-container {
+        margin: 0.75rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .ad-container,
+    .ad-side-container,
+    .ad-bottom-container,
+    .ad-sense-container {
+        margin: 0.5rem 0;
+    }
+}
