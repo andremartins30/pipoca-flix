@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
@@ -19,12 +19,12 @@ const Home = () => {
     const [filmes, setFilmes] = useState([])
     const [loading, setLoading] = useState(true)
     const [page, setPage] = useState(1)
-    const [hasMore, setHasMore] = useState(true)
-    const [loadingMore, setLoadingMore] = useState(false)
-    const [activeList, setActiveList] = useState('now_playing') // Estado para a lista ativa
+    const [totalPages, setTotalPages] = useState(1)
+    const [activeList, setActiveList] = useState('now_playing')
 
-    const loadFilmes = useCallback(async (pageNumber, list) => {
+    const loadFilmes = async (pageNumber, list) => {
         try {
+            setLoading(true)
             const response = await api.get(endpoints[list], {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
@@ -33,46 +33,110 @@ const Home = () => {
                 }
             })
 
-            const newFilmes = response.data.results
-            setFilmes(prev => pageNumber === 1 ? newFilmes : [...prev, ...newFilmes])
-            setHasMore(pageNumber < response.data.total_pages)
-            setLoadingMore(false)
+            setFilmes(response.data.results)
+            setTotalPages(response.data.total_pages)
+            setLoading(false)
         } catch (error) {
             console.error('Erro ao carregar filmes:', error)
-            setLoadingMore(false)
+            setLoading(false)
         }
-    }, [])
+    }
 
     useEffect(() => {
-        loadFilmes(1, activeList)
-        setLoading(false)
-    }, [loadFilmes, activeList])
-
-    const handleScroll = useCallback(() => {
-        if (loadingMore || !hasMore) return
-
-        const scrollHeight = document.documentElement.scrollHeight
-        const scrollTop = window.scrollY
-        const clientHeight = document.documentElement.clientHeight
-
-        if (scrollTop + clientHeight >= scrollHeight - 100) {
-            setLoadingMore(true)
-            setPage(prev => prev + 1)
-            loadFilmes(page + 1, activeList)
-        }
-    }, [loadingMore, hasMore, page, loadFilmes, activeList])
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [handleScroll])
+        loadFilmes(page, activeList)
+    }, [page, activeList])
 
     const handleBadgeClick = (list) => {
         setActiveList(list)
         setPage(1)
-        setFilmes([])
-        setLoading(true)
     }
+
+    const handlePageChange = (newPage) => {
+        setPage(newPage)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+
+    const renderPaginationButtons = () => {
+        const buttons = [];
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        // Botão "Anterior"
+        buttons.push(
+            <button
+                key="prev"
+                className="pagination-btn"
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+            >
+                &lt;
+            </button>
+        );
+
+        // Primeira página
+        if (startPage > 1) {
+            buttons.push(
+                <button
+                    key="1"
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(1)}
+                >
+                    1
+                </button>
+            );
+            if (startPage > 2) {
+                buttons.push(<span key="dots1" className="pagination-dots">...</span>);
+            }
+        }
+
+        // Páginas do meio
+        for (let i = startPage; i <= endPage; i++) {
+            buttons.push(
+                <button
+                    key={i}
+                    className={`pagination-btn ${page === i ? 'active' : ''}`}
+                    onClick={() => handlePageChange(i)}
+                >
+                    {i}
+                </button>
+            );
+        }
+
+        // Última página
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                buttons.push(<span key="dots2" className="pagination-dots">...</span>);
+            }
+            buttons.push(
+                <button
+                    key={totalPages}
+                    className="pagination-btn"
+                    onClick={() => handlePageChange(totalPages)}
+                >
+                    {totalPages}
+                </button>
+            );
+        }
+
+        // Botão "Próxima"
+        buttons.push(
+            <button
+                key="next"
+                className="pagination-btn"
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page === totalPages}
+            >
+                &gt;
+            </button>
+        );
+
+        return buttons;
+    };
 
     if (loading) {
         return <Skeleton />
@@ -133,11 +197,10 @@ const Home = () => {
                 ))}
             </div>
 
-            {loadingMore && (
-                <div className="loading-more">
-                    <div className="loading-spinner"></div>
-                </div>
-            )}
+            <div className="pagination">
+                {renderPaginationButtons()}
+            </div>
+
             <AdsterraContainer />
             <AdsterraBanner />
             <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
