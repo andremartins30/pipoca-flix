@@ -8,7 +8,7 @@ const AdsterraSideBanner = () => {
     useEffect(() => {
         let script = null;
         let retryCount = 0;
-        const maxRetries = ADS_CONFIG.adsterra.sideBanner.maxRetries;
+        const maxRetries = 3;
 
         const loadAdScript = () => {
             try {
@@ -33,7 +33,7 @@ const AdsterraSideBanner = () => {
                     console.warn('Erro ao carregar script do Adsterra Side Banner:', error);
                     if (retryCount < maxRetries) {
                         retryCount++;
-                        setTimeout(loadAdScript, ADS_CONFIG.adsterra.sideBanner.retryDelay * retryCount);
+                        setTimeout(loadAdScript, 1000 * retryCount);
                     } else {
                         setAdError(true);
                     }
@@ -43,7 +43,7 @@ const AdsterraSideBanner = () => {
                     console.log('Script do Adsterra Side Banner carregado com sucesso');
                 };
 
-                script.src = `//www.highperformanceformat.com/${ADS_CONFIG.adsterra.sideBanner.id}/invoke.js`;
+                script.src = `https://www.highperformanceformat.com/${ADS_CONFIG.adsterra.sideBanner.id}/invoke.js`;
                 document.body.appendChild(script);
             } catch (error) {
                 console.warn('Erro ao inicializar Adsterra Side Banner:', error);
@@ -82,4 +82,4 @@ const AdsterraSideBanner = () => {
     );
 };
 
-export default AdsterraSideBanner; 
+export default AdsterraSideBanner;
