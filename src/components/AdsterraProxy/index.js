@@ -58,6 +58,19 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                     }
                 };
 
+                window.addEventListener('error', (event) => {
+                    if (event.filename && event.filename.includes('invoke.js')) {
+                        console.warn('Erro global no script do Adsterra:', event);
+                        if (!adError && retryCount < maxRetries) {
+                            setRetryCount(prev => prev + 1);
+                            setTimeout(loadAdScript, 1000 * (retryCount + 1));
+                        } else {
+                            console.error('Erro persistente no script do Adsterra. Interrompendo tentativas.');
+                            setAdError(true);
+                        }
+                    }
+                }, true);
+
                 script.onload = () => {
                     clearTimeout(timeoutId);
                     console.log(`Script do Adsterra (${adId}) carregado com sucesso`);
@@ -66,19 +79,6 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                 // Usa HTTPS explicitamente e adiciona parâmetros de segurança
                 script.src = `https://www.highperformanceformat.com/${adId}/invoke.js?domain=${window.location.hostname}&secure=true`;
                 document.body.appendChild(script);
-
-                // Adiciona tratamento de erro global para o script
-                window.addEventListener('error', (event) => {
-                    if (event.filename && event.filename.includes('invoke.js')) {
-                        console.warn('Erro global no script do Adsterra:', event);
-                        if (!adError && retryCount < maxRetries) {
-                            setRetryCount(prev => prev + 1);
-                            setTimeout(loadAdScript, 1000 * (retryCount + 1));
-                        } else {
-                            setAdError(true);
-                        }
-                    }
-                }, true);
 
             } catch (error) {
                 console.warn(`Erro ao inicializar Adsterra (${adId}):`, error);
