@@ -3,27 +3,46 @@ import './adsterra-side-banner.css';
 
 const AdsterraSideBanner = () => {
     useEffect(() => {
-        // Carrega o script do anúncio
-        window.atOptions = {
-            'key': 'b0cd5c44cd06d434115251aaae49c21e',
-            'format': 'iframe',
-            'height': 300,
-            'width': 160,
-            'params': {}
-        };
+        console.log('[AdsterraSideBanner] Iniciando carregamento do banner...');
 
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = '//www.highperformanceformat.com/b0cd5c44cd06d434115251aaae49c21e/invoke.js';
-        script.async = true;
-        document.body.appendChild(script);
+        try {
+            // Carrega o script do anúncio
+            window.atOptions = {
+                'key': 'b0cd5c44cd06d434115251aaae49c21e',
+                'format': 'iframe',
+                'height': 300,
+                'width': 160,
+                'params': {}
+            };
+            console.log('[AdsterraSideBanner] Configurações definidas:', window.atOptions);
 
-        // Limpa o script quando o componente for desmontado
-        return () => {
-            if (script.parentNode) {
-                document.body.removeChild(script);
-            }
-        };
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//www.highperformanceformat.com/b0cd5c44cd06d434115251aaae49c21e/invoke.js';
+            script.async = true;
+
+            script.onload = () => {
+                console.log('[AdsterraSideBanner] Script carregado com sucesso');
+            };
+
+            script.onerror = (error) => {
+                console.error('[AdsterraSideBanner] Erro ao carregar script:', error);
+            };
+
+            document.body.appendChild(script);
+            console.log('[AdsterraSideBanner] Script adicionado ao DOM');
+
+            // Limpa o script quando o componente for desmontado
+            return () => {
+                console.log('[AdsterraSideBanner] Removendo script...');
+                if (script.parentNode) {
+                    document.body.removeChild(script);
+                    console.log('[AdsterraSideBanner] Script removido com sucesso');
+                }
+            };
+        } catch (error) {
+            console.error('[AdsterraSideBanner] Erro ao inicializar banner:', error);
+        }
     }, []);
 
     return (
