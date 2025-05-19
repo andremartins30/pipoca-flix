@@ -44,7 +44,7 @@ header {
 .header-right {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: -1.5rem;
 }
 
 /* Menu Button */
@@ -131,6 +131,12 @@ header {
         font-size: 1.5rem;
     }
 
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: -1.5rem;
+    }
+
     .logo img {
         width: 32px;
         height: 32px;
@@ -145,6 +151,12 @@ header {
 
     .site-title {
         font-size: 1.2rem;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: -1.5rem;
     }
 
     .logo img {
