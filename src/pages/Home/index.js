@@ -208,14 +208,15 @@ const Home = () => {
                         </article>
 
                         {(index + 1) % 7 === 0 && (
-                            <>
+                            <div className="ad-container">
                                 <AdsterraContainer />
                                 <AdsterraSideBanner />
-                            </>
+                            </div>
                         )}
                     </React.Fragment>
                 ))}
             </div>
+
             <div className="pagination">
                 {renderPaginationButtons()}
             </div>

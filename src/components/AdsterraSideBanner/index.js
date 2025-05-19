@@ -1,55 +1,87 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { ADS_CONFIG } from '../../config/ads';
 import './adsterra-side-banner.css';
 
 const AdsterraSideBanner = () => {
+    const [adError, setAdError] = useState(false);
+
     useEffect(() => {
-        console.log('[AdsterraSideBanner] Iniciando carregamento do banner...');
+        let script = null;
+        let retryCount = 0;
+        const maxRetries = 3;
 
-        try {
-            // Carrega o script do anúncio
-            window.atOptions = {
-                'key': 'b0cd5c44cd06d434115251aaae49c21e',
-                'format': 'iframe',
-                'height': 300,
-                'width': 160,
-                'params': {}
-            };
-            console.log('[AdsterraSideBanner] Configurações definidas:', window.atOptions);
-
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = '//www.highperformanceformat.com/b0cd5c44cd06d434115251aaae49c21e/invoke.js';
-            script.async = true;
-
-            script.onload = () => {
-                console.log('[AdsterraSideBanner] Script carregado com sucesso');
-            };
-
-            script.onerror = (error) => {
-                console.error('[AdsterraSideBanner] Erro ao carregar script:', error);
-            };
-
-            document.body.appendChild(script);
-            console.log('[AdsterraSideBanner] Script adicionado ao DOM');
-
-            // Limpa o script quando o componente for desmontado
-            return () => {
-                console.log('[AdsterraSideBanner] Removendo script...');
-                if (script.parentNode) {
-                    document.body.removeChild(script);
-                    console.log('[AdsterraSideBanner] Script removido com sucesso');
+        const loadAdScript = () => {
+            try {
+                if (script && script.parentNode) {
+                    script.parentNode.removeChild(script);
                 }
-            };
-        } catch (error) {
-            console.error('[AdsterraSideBanner] Erro ao inicializar banner:', error);
+
+                window.atOptions = {
+                    'key': ADS_CONFIG.adsterra.sideBanner.id,
+                    'format': 'iframe',
+                    'height': 300,
+                    'width': 160,
+                    'params': {}
+                };
+
+                script = document.createElement('script');
+                script.id = 'adsterra-side-banner-script';
+                script.async = true;
+                script.crossOrigin = 'anonymous';
+
+                script.onerror = (error) => {
+                    console.warn('Erro ao carregar script do Adsterra Side Banner:', error);
+                    if (retryCount < maxRetries) {
+                        retryCount++;
+                        console.log(`Tentativa ${retryCount} de recarregar o script.`);
+                        setTimeout(loadAdScript, 1000 * retryCount);
+                    } else {
+                        console.error('Falha ao carregar o script após várias tentativas. Verifique o certificado SSL ou entre em contato com o suporte do Adsterra.');
+                        setAdError(true);
+                    }
+                };
+
+                script.onload = () => {
+                    console.log('Script do Adsterra Side Banner carregado com sucesso');
+                };
+
+                script.src = `https://www.highperformanceformat.com/${ADS_CONFIG.adsterra.sideBanner.id}/invoke.js`;
+                document.body.appendChild(script);
+            } catch (error) {
+                console.warn('Erro ao inicializar Adsterra Side Banner:', error);
+                setAdError(true);
+            }
+        };
+
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Adsterra Side Banner desabilitado em ambiente de desenvolvimento');
+            return;
         }
+
+        loadAdScript();
+
+        return () => {
+            if (script && script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+        };
     }, []);
+
+    if (adError || process.env.NODE_ENV === 'development') {
+        return (
+            <div className="adsterra-side-banner-container placeholder">
+                <div className="ad-placeholder">
+                    Espaço reservado para banner lateral
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="adsterra-side-banner-container">
-            <div id="container-b0cd5c44cd06d434115251aaae49c21e"></div>
+            <div id={`container-${ADS_CONFIG.adsterra.sideBanner.id}`}></div>
         </div>
     );
 };
 
-export default AdsterraSideBanner; 
+export default AdsterraSideBanner;
