@@ -164,7 +164,7 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <AdsterraTopBanner />
+            {/* <AdsterraTopBanner /> */}
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
@@ -210,7 +210,7 @@ const Home = () => {
                         {(index + 1) % 7 === 0 && (
                             <div className="ad-container">
                                 <AdsterraContainer />
-                                <AdsterraSideBanner />
+                                {/* <AdsterraSideBanner /> */}
                             </div>
                         )}
                     </React.Fragment>
