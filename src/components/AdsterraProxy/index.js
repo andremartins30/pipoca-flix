@@ -1,60 +1,65 @@
 import React, { useEffect, useState } from 'react';
 import { ADS_CONFIG } from '../../config/ads';
 
-const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
+const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) => {
     const [adError, setAdError] = useState(false);
-    const [scriptLoaded, setScriptLoaded] = useState(false);
+    const [retryCount, setRetryCount] = useState(0);
+    const maxRetries = 3;
 
     useEffect(() => {
         let script = null;
-        let retryCount = 0;
-        const maxRetries = 3;
+        let timeoutId = null;
 
         const loadAdScript = () => {
             try {
+                // Limpa qualquer script anterior
                 if (script && script.parentNode) {
                     script.parentNode.removeChild(script);
                 }
 
-                // Configuração do anúncio
+                // Configura as opções do anúncio
                 window.atOptions = {
                     'key': adId,
                     'format': format,
                     'height': height,
                     'width': width,
-                    'params': {
-                        'sameDomain': true,
-                        'allowScriptAccess': true,
-                        'secure': true
-                    }
+                    'params': {}
                 };
 
+                // Cria o script
                 script = document.createElement('script');
                 script.id = `adsterra-script-${adId}`;
                 script.async = true;
                 script.crossOrigin = 'anonymous';
                 script.setAttribute('data-cfasync', 'false');
-                script.setAttribute('data-ad-client', adId);
 
-                // Adicionando fallback para erros de SSL e cookies de terceiros
-                const handleScriptError = (error) => {
-                    console.warn(`Erro ao carregar script do Adsterra (${adId}):`, error);
+                // Configura o timeout para o carregamento
+                timeoutId = setTimeout(() => {
                     if (retryCount < maxRetries) {
-                        retryCount++;
-                        setTimeout(loadAdScript, 1000 * retryCount);
+                        setRetryCount(prev => prev + 1);
+                        loadAdScript();
+                    } else {
+                        setAdError(true);
+                    }
+                }, 5000); // 5 segundos de timeout
+
+                script.onerror = (error) => {
+                    console.warn(`Erro ao carregar script do Adsterra (${adId}):`, error);
+                    clearTimeout(timeoutId);
+                    if (retryCount < maxRetries) {
+                        setRetryCount(prev => prev + 1);
+                        setTimeout(loadAdScript, 1000 * (retryCount + 1));
                     } else {
                         setAdError(true);
                     }
                 };
 
-                script.onerror = handleScriptError;
-
                 script.onload = () => {
+                    clearTimeout(timeoutId);
                     console.log(`Script do Adsterra (${adId}) carregado com sucesso`);
-                    setScriptLoaded(true);
                 };
 
-                // Usar HTTPS explicitamente
+                // Usa HTTPS explicitamente
                 script.src = `https://www.highperformanceformat.com/${adId}/invoke.js`;
                 document.body.appendChild(script);
             } catch (error) {
@@ -63,29 +68,9 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
             }
         };
 
+        // Verifica se estamos em ambiente de desenvolvimento
         if (process.env.NODE_ENV === 'development') {
             console.log(`Adsterra (${adId}) desabilitado em ambiente de desenvolvimento`);
-            return;
-        }
-
-        // Verifica se o navegador suporta cookies de terceiros
-        const checkThirdPartyCookies = () => {
-            try {
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-                const result = iframe.contentWindow.navigator.cookieEnabled;
-                document.body.removeChild(iframe);
-                return result;
-            } catch (e) {
-                console.warn('Erro ao verificar cookies de terceiros:', e);
-                return false;
-            }
-        };
-
-        if (!checkThirdPartyCookies()) {
-            console.warn('Cookies de terceiros não são suportados neste navegador');
-            setAdError(true);
             return;
         }
 
@@ -95,12 +80,15 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
             if (script && script.parentNode) {
                 script.parentNode.removeChild(script);
             }
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
         };
-    }, [adId, format, height, width]);
+    }, [adId, format, height, width, retryCount]);
 
     if (adError || process.env.NODE_ENV === 'development') {
         return (
-            <div className="adsterra-proxy-container placeholder">
+            <div className="adsterra-placeholder">
                 <div className="ad-placeholder">
                     Espaço reservado para anúncio
                 </div>
@@ -109,7 +97,7 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
     }
 
     return (
-        <div className="adsterra-proxy-container">
+        <div className="adsterra-container">
             <div id={containerId}></div>
         </div>
     );

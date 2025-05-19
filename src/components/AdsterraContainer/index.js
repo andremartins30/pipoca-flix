@@ -5,14 +5,15 @@ import AdsterraProxy from '../AdsterraProxy';
 import './adsterra-container.css';
 
 const AdsterraContainer = () => {
+    const config = ADS_CONFIG.adsterra.container;
     return (
         <ErrorBoundary>
             <AdsterraProxy
-                adId={ADS_CONFIG.adsterra.container.id}
-                format="iframe"
-                height={250}
-                width={300}
-                containerId={`container-${ADS_CONFIG.adsterra.container.id}`}
+                adId={config.id}
+                format={config.format}
+                height={config.height}
+                width={config.width}
+                containerId={`container-${config.id}`}
             />
         </ErrorBoundary>
     );

@@ -188,7 +188,6 @@ const Home = () => {
             </div>
 
             <div className="lista-filmes">
-                <AdsterraTopBanner />
                 {filmes.map((filme, index) => (
                     <React.Fragment key={filme.id}>
                         <article className="filme-card">
@@ -211,11 +210,13 @@ const Home = () => {
                         {(index + 1) % 7 === 0 && (
                             <div className="ad-container">
                                 <AdsterraContainer />
+                                <AdsterraSideBanner />
                             </div>
                         )}
                     </React.Fragment>
                 ))}
             </div>
+
             <div className="pagination">
                 {renderPaginationButtons()}
             </div>

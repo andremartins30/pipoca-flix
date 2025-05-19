@@ -392,6 +392,20 @@ html[data-theme="dark"] .filme-card strong {
 
 .ad-container {
     grid-column: 1 / -1;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 2rem 0;
+}
+
+.ad-container .adsterra-container {
+    flex: 1;
+    max-width: 300px;
+}
+
+.ad-container .adsterra-side-banner {
+    width: 160px;
 }
 
 .ad-side-container {
@@ -408,6 +422,17 @@ html[data-theme="dark"] .filme-card strong {
 
 /* Media Queries para os containers de anúncios */
 @media (max-width: 768px) {
+    .ad-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .ad-container .adsterra-container,
+    .ad-container .adsterra-side-banner {
+        max-width: 100%;
+        width: 100%;
+    }
 
     .ad-container,
     .ad-side-container,
@@ -418,6 +443,9 @@ html[data-theme="dark"] .filme-card strong {
 }
 
 @media (max-width: 480px) {
+    .ad-container {
+        margin: 1rem 0;
+    }
 
     .ad-container,
     .ad-side-container,
