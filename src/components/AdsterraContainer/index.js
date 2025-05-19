@@ -1,20 +1,13 @@
 import React from 'react';
 import ErrorBoundary from '../ErrorBoundary';
-import { ADS_CONFIG } from '../../config/ads';
-import AdsterraProxy from '../AdsterraProxy';
 import './adsterra-container.css';
 
 const AdsterraContainer = () => {
-    const config = ADS_CONFIG.adsterra.container;
+
     return (
         <ErrorBoundary>
-            <AdsterraProxy
-                adId={config.id}
-                format={config.format}
-                height={config.height}
-                width={config.width}
-                containerId={`container-${config.id}`}
-            />
+            <script async="async" data-cfasync="false" src="//pl26668277.profitableratecpm.com/2d0ce4709cffb0560e57a528bccd6b6f/invoke.js"></script>
+            <div id="container-2d0ce4709cffb0560e57a528bccd6b6f"></div>
         </ErrorBoundary>
     );
 };

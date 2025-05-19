@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ErrorBoundary from '../ErrorBoundary';
-import { ADS_CONFIG } from '../../config/ads';
-import AdsterraProxy from '../AdsterraProxy';
 import './adsterra-banner.css';
 
 const AdsterraBanner = () => {
-    const config = ADS_CONFIG.adsterra.banner;
+
+    useEffect(() => {
+        const scriptOptions = document.createElement('script');
+        scriptOptions.type = 'text/javascript';
+        scriptOptions.innerHTML = `
+            atOptions = {
+                'key': '3a10b17c7da86ab4fb26cdb415db2364',
+                'format' : 'iframe',
+                'height' : 60,
+                'width' : 468,
+                'params' : { }
+            };
+        `;
+
+        const scriptInvoke = document.createElement('script');
+        scriptInvoke.type = 'text/javascript';
+        scriptInvoke.src = '//www.highperformanceformat.com/3a10b17c7da86ab4fb26cdb415db2364/invoke.js';
+
+        const adContainer = document.getElementById('adsterra-banner-container');
+        if (adContainer) {
+            adContainer.appendChild(scriptOptions);
+            adContainer.appendChild(scriptInvoke);
+        }
+
+        return () => {
+            if (adContainer) {
+                adContainer.innerHTML = '';
+            }
+        };
+    }, []);
+
     return (
         <ErrorBoundary>
-            <AdsterraProxy
-                adId={config.id}
-                format={config.format}
-                height={config.height}
-                width={config.width}
-                containerId={`banner-${config.id}`}
-            />
+            <div id="adsterra-banner-container"></div>
         </ErrorBoundary>
     );
 };
 
-export default AdsterraBanner; 
+export default AdsterraBanner;
