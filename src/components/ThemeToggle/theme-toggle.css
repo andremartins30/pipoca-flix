@@ -15,7 +15,7 @@
 
 .toggle-track {
     width: 90px;
-    height: 50px;
+    height: 40px;
     border-radius: 50px;
     background: #dff3ff;
     position: relative;
@@ -199,32 +199,32 @@
 
     .theme-toggle,
     .toggle-track {
-        width: 70px;
-        height: 36px;
+        width: 90px;
+        height: 32px;
     }
 
     .sun,
     .moon {
         width: 20px;
         height: 20px;
-        top: 8px;
+        top: 4px;
     }
 
     .moon {
-        left: 45px;
+        left: 50px;
     }
 
     .cloud1 {
         width: 14px;
         height: 8px;
-        top: 16px;
+        top: 14px;
         left: 25px;
     }
 
     .cloud2 {
         width: 10px;
         height: 10px;
-        top: 10px;
+        top: 8px;
         left: 34px;
     }
 }
