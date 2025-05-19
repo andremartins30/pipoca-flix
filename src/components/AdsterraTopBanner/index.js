@@ -21,13 +21,17 @@ const AdsterraTopBanner = () => {
                     'format': 'iframe',
                     'height': 90,
                     'width': 728,
-                    'params': {}
+                    'params': {
+                        'sameDomain': true,
+                        'allowScriptAccess': true
+                    }
                 };
 
                 script = document.createElement('script');
                 script.id = 'adsterra-top-banner-script';
                 script.async = true;
                 script.crossOrigin = 'anonymous';
+                script.setAttribute('data-ad-client', ADS_CONFIG.adsterra.topBanner.id);
 
                 script.onerror = (error) => {
                     console.warn('Erro ao carregar script do Adsterra Top Banner:', error);
@@ -56,7 +60,26 @@ const AdsterraTopBanner = () => {
             return;
         }
 
-        loadAdScript();
+        // Verifica se o navegador suporta cookies de terceiros
+        const checkThirdPartyCookies = () => {
+            try {
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                const result = iframe.contentWindow.navigator.cookieEnabled;
+                document.body.removeChild(iframe);
+                return result;
+            } catch (e) {
+                return false;
+            }
+        };
+
+        if (checkThirdPartyCookies()) {
+            loadAdScript();
+        } else {
+            console.warn('Cookies de terceiros não são suportados neste navegador');
+            setAdError(true);
+        }
 
         return () => {
             if (script && script.parentNode) {
