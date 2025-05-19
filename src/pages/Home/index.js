@@ -7,6 +7,8 @@ import AdSense from '../../components/AdSense'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
 import AdsterraContainer from '../../components/AdsterraContainer'
+import AdsterraSideBanner from '../../components/AdsterraSideBanner'
+import AdsterraTopBanner from '../../components/AdsterraTopBanner'
 
 const endpoints = {
     now_playing: 'movie/now_playing',
@@ -162,7 +164,7 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <AdsterraBanner />
+            <AdsterraTopBanner />
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
@@ -208,7 +210,7 @@ const Home = () => {
                         {(index + 1) % 7 === 0 && (
                             <>
                                 <AdsterraContainer />
-                                <AdsterraContainer />
+                                <AdsterraSideBanner />
                             </>
                         )}
                     </React.Fragment>
@@ -219,8 +221,6 @@ const Home = () => {
                 {renderPaginationButtons()}
             </div>
 
-            <AdsterraContainer />
-            <AdsterraBanner />
             <AdsterraBanner />
             <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
         </div>

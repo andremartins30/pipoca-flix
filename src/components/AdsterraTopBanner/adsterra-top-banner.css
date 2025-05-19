@@ -1,0 +1,38 @@
+.adsterra-top-banner-container {
+    width: 100%;
+    max-width: 728px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    margin: 0 auto 2rem auto;
+}
+
+html[data-theme="dark"] .adsterra-top-banner-container {
+    background-color: #1e1e1e;
+}
+
+.adsterra-top-banner-container:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .adsterra-top-banner-container {
+        max-width: 100%;
+        margin: 0 auto 1.5rem auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .adsterra-top-banner-container {
+        max-width: 100%;
+        margin: 0 auto 1rem auto;
+    }
+}
