@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import api from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
-import AdSense from '../../components/AdSense'
+// import AdSense from '../../components/AdSense'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
 import AdsterraContainer from '../../components/AdsterraContainer'
@@ -209,18 +209,13 @@ const Home = () => {
 
                         {(index + 1) % 7 === 0 && (
                             <>
-                                <div className="ad-container">
-                                    <AdsterraContainer />
-                                </div>
-                                <div className="ad-side-container">
-                                    <AdsterraSideBanner />
-                                </div>
+                                <AdsterraContainer />
+                                <AdsterraSideBanner />
                             </>
                         )}
                     </React.Fragment>
                 ))}
             </div>
-
             <div className="pagination">
                 {renderPaginationButtons()}
             </div>
@@ -228,9 +223,9 @@ const Home = () => {
             <div className="ad-bottom-container">
                 <AdsterraBanner />
             </div>
-            <div className="ad-sense-container">
+            {/* <div className="ad-sense-container">
                 <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
-            </div>
+            </div> */}
         </div>
     )
 }
