@@ -76,7 +76,7 @@ const Home = () => {
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
             >
-                {isMobile ? '&lt;' : 'Anterior'}
+                {isMobile ? '<' : 'Anterior'}
             </button>
         );
 
@@ -138,7 +138,7 @@ const Home = () => {
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
             >
-                {isMobile ? '&gt;' : 'Próxima'}
+                {isMobile ? '>' : 'Próxima'}
             </button>
         );
 
@@ -205,10 +205,10 @@ const Home = () => {
                             </Link>
                         </article>
 
-                        {(index + 1) % 12 === 0 && (
+                        {(index + 1) % 7 === 0 && (
                             <>
                                 <AdsterraContainer />
-                                <AdsterraBanner />
+                                <AdsterraContainer />
                             </>
                         )}
                     </React.Fragment>
@@ -220,6 +220,7 @@ const Home = () => {
             </div>
 
             <AdsterraContainer />
+            <AdsterraBanner />
             <AdsterraBanner />
             <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
         </div>
