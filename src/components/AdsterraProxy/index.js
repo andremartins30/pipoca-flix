@@ -50,8 +50,10 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                     clearTimeout(timeoutId);
                     if (retryCount < maxRetries) {
                         setRetryCount(prev => prev + 1);
+                        console.log(`Tentativa ${retryCount + 1} de recarregar o script.`);
                         setTimeout(loadAdScript, 1000 * (retryCount + 1));
                     } else {
+                        console.error('Falha ao carregar o script após várias tentativas. Verifique o certificado SSL ou entre em contato com o suporte do Adsterra.');
                         setAdError(true);
                     }
                 };
@@ -68,7 +70,7 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                 // Adiciona tratamento de erro global para o script
                 window.addEventListener('error', (event) => {
                     if (event.filename && event.filename.includes('invoke.js')) {
-                        console.warn('Erro no script do Adsterra:', event);
+                        console.warn('Erro global no script do Adsterra:', event);
                         if (!adError && retryCount < maxRetries) {
                             setRetryCount(prev => prev + 1);
                             setTimeout(loadAdScript, 1000 * (retryCount + 1));
@@ -101,7 +103,7 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
             }
             window.removeEventListener('error', loadAdScript);
         };
-    }, [adId, format, height, width, retryCount]);
+    }, [adId, format, height, width, retryCount, adError]);
 
     if (adError || process.env.NODE_ENV === 'development') {
         return (
