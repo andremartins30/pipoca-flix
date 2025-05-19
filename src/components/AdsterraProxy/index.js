@@ -36,7 +36,8 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
                 script.setAttribute('data-cfasync', 'false');
                 script.setAttribute('data-ad-client', adId);
 
-                script.onerror = (error) => {
+                // Adicionando fallback para erros de SSL e cookies de terceiros
+                const handleScriptError = (error) => {
                     console.warn(`Erro ao carregar script do Adsterra (${adId}):`, error);
                     if (retryCount < maxRetries) {
                         retryCount++;
@@ -45,6 +46,8 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
                         setAdError(true);
                     }
                 };
+
+                script.onerror = handleScriptError;
 
                 script.onload = () => {
                     console.log(`Script do Adsterra (${adId}) carregado com sucesso`);
@@ -75,16 +78,18 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
                 document.body.removeChild(iframe);
                 return result;
             } catch (e) {
+                console.warn('Erro ao verificar cookies de terceiros:', e);
                 return false;
             }
         };
 
-        if (checkThirdPartyCookies()) {
-            loadAdScript();
-        } else {
+        if (!checkThirdPartyCookies()) {
             console.warn('Cookies de terceiros não são suportados neste navegador');
             setAdError(true);
+            return;
         }
+
+        loadAdScript();
 
         return () => {
             if (script && script.parentNode) {
@@ -110,4 +115,4 @@ const AdsterraProxy = ({ adId, format, height, width, containerId }) => {
     );
 };
 
-export default AdsterraProxy; 
+export default AdsterraProxy;
