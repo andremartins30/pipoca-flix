@@ -1,86 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { ADS_CONFIG } from '../../config/ads';
+import React, { useEffect } from 'react';
 import './adsterra-side-banner.css';
 
 const AdsterraSideBanner = () => {
-    const [adError, setAdError] = useState(false);
 
     useEffect(() => {
-        let script = null;
-        let retryCount = 0;
-        const maxRetries = 3;
+        const scriptOptions = document.createElement('script');
+        scriptOptions.type = 'text/javascript';
+        scriptOptions.innerHTML = `
+            atOptions = {
+                'key' : 'b0cd5c44cd06d434115251aaae49c21e',
+                'format' : 'iframe',
+                'height' : 300,
+                'width' : 160,
+                'params' : {}
+            };
+        `;
 
-        const loadAdScript = () => {
-            try {
-                if (script && script.parentNode) {
-                    script.parentNode.removeChild(script);
-                }
+        const scriptInvoke = document.createElement('script');
+        scriptInvoke.type = 'text/javascript';
+        scriptInvoke.src = '//www.highperformanceformat.com/b0cd5c44cd06d434115251aaae49c21e/invoke.js';
 
-                window.atOptions = {
-                    'key': ADS_CONFIG.adsterra.sideBanner.id,
-                    'format': 'iframe',
-                    'height': 300,
-                    'width': 160,
-                    'params': {}
-                };
-
-                script = document.createElement('script');
-                script.id = 'adsterra-side-banner-script';
-                script.async = true;
-                script.crossOrigin = 'anonymous';
-
-                script.onerror = (error) => {
-                    console.warn('Erro ao carregar script do Adsterra Side Banner:', error);
-                    if (retryCount < maxRetries) {
-                        retryCount++;
-                        console.log(`Tentativa ${retryCount} de recarregar o script.`);
-                        setTimeout(loadAdScript, 1000 * retryCount);
-                    } else {
-                        console.error('Falha ao carregar o script após várias tentativas. Verifique o certificado SSL ou entre em contato com o suporte do Adsterra.');
-                        setAdError(true);
-                    }
-                };
-
-                script.onload = () => {
-                    console.log('Script do Adsterra Side Banner carregado com sucesso');
-                };
-
-                script.src = `https://www.highperformanceformat.com/${ADS_CONFIG.adsterra.sideBanner.id}/invoke.js`;
-                document.body.appendChild(script);
-            } catch (error) {
-                console.warn('Erro ao inicializar Adsterra Side Banner:', error);
-                setAdError(true);
-            }
-        };
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Adsterra Side Banner desabilitado em ambiente de desenvolvimento');
-            return;
+        const adContainer = document.getElementById('adsterra-side-banner-container');
+        if (adContainer) {
+            adContainer.appendChild(scriptOptions);
+            adContainer.appendChild(scriptInvoke);
         }
 
-        loadAdScript();
-
         return () => {
-            if (script && script.parentNode) {
-                script.parentNode.removeChild(script);
+            if (adContainer) {
+                adContainer.innerHTML = '';
             }
         };
     }, []);
 
-    if (adError || process.env.NODE_ENV === 'development') {
-        return (
-            <div className="adsterra-side-banner-container placeholder">
-                <div className="ad-placeholder">
-                    Espaço reservado para banner lateral
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="adsterra-side-banner-container">
-            <div id={`container-${ADS_CONFIG.adsterra.sideBanner.id}`}></div>
-        </div>
+        <div id="adsterra-side-banner-container"></div>
     );
 };
 

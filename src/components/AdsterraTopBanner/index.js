@@ -1,84 +1,40 @@
-import React, { useEffect, useState } from 'react';
-import { ADS_CONFIG } from '../../config/ads';
+import React, { useEffect } from 'react';
 import './adsterra-top-banner.css';
 
 const AdsterraTopBanner = () => {
-    const [adError, setAdError] = useState(false);
 
     useEffect(() => {
-        let script = null;
-        let retryCount = 0;
-        const maxRetries = 3;
+        const scriptOptions = document.createElement('script');
+        scriptOptions.type = 'text/javascript';
+        scriptOptions.innerHTML = `
+            atOptions = {
+                'key' : '6ebf48f2af8544eb09fc914558246433',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        `;
 
-        const loadAdScript = () => {
-            try {
-                if (script && script.parentNode) {
-                    script.parentNode.removeChild(script);
-                }
+        const scriptInvoke = document.createElement('script');
+        scriptInvoke.type = 'text/javascript';
+        scriptInvoke.src = '//www.highperformanceformat.com/6ebf48f2af8544eb09fc914558246433/invoke.js';
 
-                window.atOptions = {
-                    'key': ADS_CONFIG.adsterra.topBanner.id,
-                    'format': 'iframe',
-                    'height': 90,
-                    'width': 728,
-                    'params': {}
-                };
-
-                script = document.createElement('script');
-                script.id = 'adsterra-top-banner-script';
-                script.async = true;
-                script.crossOrigin = 'anonymous';
-
-                script.onerror = (error) => {
-                    console.warn('Erro ao carregar script do Adsterra Top Banner:', error);
-                    if (retryCount < maxRetries) {
-                        retryCount++;
-                        setTimeout(loadAdScript, 1000 * retryCount);
-                    } else {
-                        setAdError(true);
-                    }
-                };
-
-                script.onload = () => {
-                    console.log('Script do Adsterra Top Banner carregado com sucesso');
-                };
-
-                script.src = `https://www.highperformanceformat.com/${ADS_CONFIG.adsterra.topBanner.id}/invoke.js`;
-                document.body.appendChild(script);
-            } catch (error) {
-                console.warn('Erro ao inicializar Adsterra Top Banner:', error);
-                setAdError(true);
-            }
-        };
-
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Adsterra Top Banner desabilitado em ambiente de desenvolvimento');
-            return;
+        const adContainer = document.getElementById('adsterra-top-banner-container');
+        if (adContainer) {
+            adContainer.appendChild(scriptOptions);
+            adContainer.appendChild(scriptInvoke);
         }
 
-        loadAdScript();
-
         return () => {
-            if (script && script.parentNode) {
-                script.parentNode.removeChild(script);
+            if (adContainer) {
+                adContainer.innerHTML = '';
             }
         };
     }, []);
 
-    if (adError || process.env.NODE_ENV === 'development') {
-        return (
-            <div className="adsterra-top-banner-container placeholder">
-                <div className="ad-placeholder">
-                    Espaço reservado para banner superior
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="adsterra-top-banner-container">
-            <div id={`container-${ADS_CONFIG.adsterra.topBanner.id}`}></div>
-        </div>
+        <div id="adsterra-top-banner-container"></div>
     );
 };
 
