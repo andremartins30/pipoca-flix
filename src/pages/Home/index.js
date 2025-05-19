@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
 // import AdSense from '../../components/AdSense'
 import './home.css'
-// import AdsterraBanner from '../../components/AdsterraBanner'
-// import AdsterraContainer from '../../components/AdsterraContainer'
+import AdsterraBanner from '../../components/AdsterraBanner'
+import AdsterraContainer from '../../components/AdsterraContainer'
 // import AdsterraSideBanner from '../../components/AdsterraSideBanner'
 // import AdsterraTopBanner from '../../components/AdsterraTopBanner'
 
@@ -209,7 +209,7 @@ const Home = () => {
 
                         {(index + 1) % 7 === 0 && (
                             <div className="ad-container">
-                                {/*<AdsterraContainer />*/}
+                                <AdsterraContainer />
                                 {/* <AdsterraSideBanner /> */}
                             </div>
                         )}
@@ -222,7 +222,7 @@ const Home = () => {
             </div>
 
             <div className="ad-bottom-container">
-                {/* <AdsterraBanner /> */}
+                <AdsterraBanner />
             </div>
             {/* <div className="ad-sense-container">
                 <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
