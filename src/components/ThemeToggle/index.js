@@ -24,12 +24,25 @@ const ThemeToggle = () => {
             aria-label={`Alternar para modo ${theme === 'light' ? 'escuro' : 'claro'}`}
         >
             <div className="toggle-track">
-                <div className="toggle-thumb"></div>
-                <div className="toggle-icon sun">☀️</div>
-                <div className="toggle-icon moon">🌙</div>
+                <div className="toggle-sky">
+                    <div className="sun"></div>
+                    <div className="cloud cloud1"></div>
+                    <div className="cloud cloud2"></div>
+                    <div className="moon">
+                        <div className="moon-spot spot1"></div>
+                        <div className="moon-spot spot2"></div>
+                    </div>
+                    <div className="stars">
+                        <div className="star s1"></div>
+                        <div className="star s2"></div>
+                        <div className="star s3"></div>
+                        <div className="star s4"></div>
+                        <div className="star s5"></div>
+                    </div>
+                </div>
             </div>
         </button>
     )
 }
 
-export default ThemeToggle 
+export default ThemeToggle
