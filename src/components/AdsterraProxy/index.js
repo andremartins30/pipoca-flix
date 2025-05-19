@@ -23,7 +23,8 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                     'format': format,
                     'height': height,
                     'width': width,
-                    'params': {}
+                    'params': {},
+                    'domain': 'highperformanceformat.com'
                 };
 
                 // Cria o script
@@ -32,6 +33,7 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                 script.async = true;
                 script.crossOrigin = 'anonymous';
                 script.setAttribute('data-cfasync', 'false');
+                script.setAttribute('data-csp-nonce', 'adsterra-script');
 
                 // Configura o timeout para o carregamento
                 timeoutId = setTimeout(() => {
@@ -41,7 +43,7 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                     } else {
                         setAdError(true);
                     }
-                }, 5000); // 5 segundos de timeout
+                }, 5000);
 
                 script.onerror = (error) => {
                     console.warn(`Erro ao carregar script do Adsterra (${adId}):`, error);
@@ -59,9 +61,23 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
                     console.log(`Script do Adsterra (${adId}) carregado com sucesso`);
                 };
 
-                // Usa HTTPS explicitamente
-                script.src = `https://www.highperformanceformat.com/${adId}/invoke.js`;
+                // Usa HTTPS explicitamente e adiciona parâmetros de segurança
+                script.src = `https://www.highperformanceformat.com/${adId}/invoke.js?domain=${window.location.hostname}&secure=true`;
                 document.body.appendChild(script);
+
+                // Adiciona tratamento de erro global para o script
+                window.addEventListener('error', (event) => {
+                    if (event.filename && event.filename.includes('invoke.js')) {
+                        console.warn('Erro no script do Adsterra:', event);
+                        if (!adError && retryCount < maxRetries) {
+                            setRetryCount(prev => prev + 1);
+                            setTimeout(loadAdScript, 1000 * (retryCount + 1));
+                        } else {
+                            setAdError(true);
+                        }
+                    }
+                }, true);
+
             } catch (error) {
                 console.warn(`Erro ao inicializar Adsterra (${adId}):`, error);
                 setAdError(true);
@@ -83,6 +99,7 @@ const AdsterraProxy = ({ adId, format = 'iframe', height, width, containerId }) 
             if (timeoutId) {
                 clearTimeout(timeoutId);
             }
+            window.removeEventListener('error', loadAdScript);
         };
     }, [adId, format, height, width, retryCount]);
 

@@ -33,8 +33,10 @@ const AdsterraSideBanner = () => {
                     console.warn('Erro ao carregar script do Adsterra Side Banner:', error);
                     if (retryCount < maxRetries) {
                         retryCount++;
+                        console.log(`Tentativa ${retryCount} de recarregar o script.`);
                         setTimeout(loadAdScript, 1000 * retryCount);
                     } else {
+                        console.error('Falha ao carregar o script após várias tentativas. Verifique o certificado SSL ou entre em contato com o suporte do Adsterra.');
                         setAdError(true);
                     }
                 };
