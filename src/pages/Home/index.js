@@ -7,8 +7,9 @@ import Skeleton from '../../components/Skeleton'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
 import AdsterraContainer from '../../components/AdsterraContainer'
-import AdsterraSideBanner from '../../components/AdsterraSideBanner'
-import AdsterraTopBanner from '../../components/AdsterraTopBanner'
+import AdsterraPopUnder from '../../components/AdsterraPopUnder'
+// import AdsterraSideBanner from '../../components/AdsterraSideBanner'
+// import AdsterraTopBanner from '../../components/AdsterraTopBanner'
 
 const endpoints = {
     now_playing: 'movie/now_playing',
@@ -164,8 +165,8 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <AdsterraTopBanner />
-
+            {/* <AdsterraTopBanner /> */}
+            <AdsterraPopUnder />
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
             <div className='badges'>
@@ -207,10 +208,10 @@ const Home = () => {
                             </Link>
                         </article>
 
-                        {(index + 1) % 7 === 0 && (
-                            <div className="ad-container">
+                        {(index + 1) % 16 === 0 && (
+                            <div>
                                 <AdsterraContainer />
-                                <AdsterraSideBanner />
+                                {/* <AdsterraSideBanner /> */}
                             </div>
                         )}
                     </React.Fragment>
