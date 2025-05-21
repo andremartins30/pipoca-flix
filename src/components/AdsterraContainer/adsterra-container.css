@@ -28,3 +28,18 @@
 [data-theme='dark'] .ad-placeholder {
     color: #999;
 }
+
+.adsterra-card {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    padding-top: 150%;
+    /* Mantém a proporção do card */
+}

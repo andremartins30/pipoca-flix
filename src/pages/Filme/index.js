@@ -6,6 +6,7 @@ import './filme.css'
 import { toast } from 'react-toastify'
 import SimilarMovies from '../../components/SimilarMovies'
 import AdsterraContainer from '../../components/AdsterraContainer'
+import AdsterraPopUnder from '../../components/AdsterraPopUnder'
 // import AdSense from '../../components/AdSense'
 
 const Filme = () => {
@@ -80,7 +81,9 @@ const Filme = () => {
     }
 
     return (
+
         <div className='filme-info'>
+            <AdsterraPopUnder />
             <h1>{filme.title}</h1>
             <img src={`https://image.tmdb.org/t/p/original/${filme.backdrop_path}`} alt={filme.title} />
 

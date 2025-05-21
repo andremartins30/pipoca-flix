@@ -3,7 +3,6 @@ import ErrorBoundary from '../ErrorBoundary';
 import './adsterra-container.css';
 
 const AdsterraContainer = () => {
-
     useEffect(() => {
         const script = document.createElement('script');
         script.async = true;
@@ -12,6 +11,7 @@ const AdsterraContainer = () => {
 
         const adContainer = document.getElementById('container-2d0ce4709cffb0560e57a528bccd6b6f');
         if (adContainer) {
+            adContainer.innerHTML = ''; // Limpa o container antes de adicionar o script
             adContainer.appendChild(script);
         }
 
@@ -24,7 +24,7 @@ const AdsterraContainer = () => {
 
     return (
         <ErrorBoundary>
-            <div id="container-2d0ce4709cffb0560e57a528bccd6b6f"></div>
+            <div id="container-2d0ce4709cffb0560e57a528bccd6b6f" className="adsterra-card"></div>
         </ErrorBoundary>
     );
 };
