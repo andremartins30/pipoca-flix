@@ -3,6 +3,7 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import "./favoritos.css"
 import { toast } from "react-toastify"
+import AdsterraBanner from "../../components/AdsterraBanner"
 
 function Favoritos() {
     const [filmes, setFilmes] = useState([])
@@ -73,6 +74,9 @@ function Favoritos() {
                 })}
                 </ul>
             )}
+            <div className="ad-bottom-container">
+                <AdsterraBanner />
+            </div>
         </div>
     )
 }

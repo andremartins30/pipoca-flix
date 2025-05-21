@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './cinemas.css'
 import AdSense from '../../components/AdSense'
+import AdsterraBanner from '../../components/AdsterraBanner'
 
 const Cinemas = () => {
     const [loading, setLoading] = useState(true)
@@ -25,6 +26,7 @@ const Cinemas = () => {
             <div>
                 <AdSense adSlot="8773604401" format="fluid" style={{ display: 'block' }} />
             </div>
+            <AdsterraBanner />
         </div>
     )
 }
