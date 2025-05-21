@@ -30,7 +30,7 @@
 }
 
 .adsterra-card {
-    background-color: #fff;
+    background-color: --background;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow);
@@ -40,6 +40,5 @@
     flex-direction: column;
     position: relative;
     width: 100%;
-    padding-top: 150%;
-    /* Mantém a proporção do card */
+    padding-top: 10%;
 }

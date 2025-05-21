@@ -5,8 +5,9 @@ import api from '../../services/api'
 import './filme.css'
 import { toast } from 'react-toastify'
 import SimilarMovies from '../../components/SimilarMovies'
-import AdsterraContainer from '../../components/AdsterraContainer'
+// import AdsterraContainer from '../../components/AdsterraContainer'
 import AdsterraPopUnder from '../../components/AdsterraPopUnder'
+import AdsterraBanner from '../../components/AdsterraBanner'
 // import AdSense from '../../components/AdSense'
 
 const Filme = () => {
@@ -133,9 +134,7 @@ const Filme = () => {
                 </div>
             </div>
 
-            <AdsterraContainer />
-
-
+            <AdsterraBanner />
         </div>
     )
 }
