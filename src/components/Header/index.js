@@ -35,9 +35,22 @@ const Header = () => {
                     <img src={icon} alt='icon' />
                     <span className="site-title">PipocaFLIX</span>
                 </Link>
+
+                <div className="nav-links desktop-only">
+                    <Link to="/" className='nav-link'>Filmes</Link>
+                    <Link to="/series" className='nav-link'>Séries</Link>
+                    <Link to="/cinemas" className='nav-link'>Games</Link>
+                </div>
+
+                <div className="nav-dropdown mobile-only">
+                    <button className="nav-dropdown-button">▼</button>
+                    <div className="nav-dropdown-menu">
+                        <Link to="/" className='nav-link'>Filmes</Link>
+                        <Link to="/series" className='nav-link'>Séries</Link>
+                        <Link to="/cinemas" className='nav-link'>Games</Link>
+                    </div>
+                </div>
             </div>
-
-
 
             <div className="header-right">
                 <SearchBar onSearch={handleSearch} />

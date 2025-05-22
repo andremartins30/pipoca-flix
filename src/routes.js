@@ -10,6 +10,8 @@ const Erro = lazy(() => import('./pages/Erro'))
 const Favoritos = lazy(() => import('./pages/Favoritos'))
 const Search = lazy(() => import('./pages/Search'))
 const Cinemas = lazy(() => import('./pages/Cinemas'))
+const Series = lazy(() => import('./pages/Series'))
+const SerieDetail = lazy(() => import('./pages/SerieDetail'))
 
 // Componente de loading
 const Loading = () => <div>Carregando...</div>
@@ -33,7 +35,9 @@ function RoutesApp() {
             <Suspense fallback={<Loading />}>
                 <Routes>
                     <Route path='/' element={<Home />} />
+                    <Route path='/series' element={<Series />} />
                     <Route path='/filme/:id' element={<Filme />} />
+                    <Route path='/serie/:id' element={<SerieDetail />} />
                     <Route path='/favoritos' element={<Favoritos />} />
                     <Route path='/search' element={<Search />} />
                     <Route path='/cinemas' element={<Cinemas />} />
