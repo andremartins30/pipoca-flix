@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { tmdbApi } from '../../services/api';
 import Skeleton from '../../components/Skeleton';
@@ -177,9 +177,7 @@ const Series = () => {
 
             <AdsterraTopBanner />
 
-            <header>
-                <h1 className="page-title">PipocaFLIX - Séries em Alta</h1>
-            </header>
+            <h1 className="page-title">PipocaFLIX - Séries em Alta</h1>
 
             <nav className="badges" aria-label="Filtro de período">
                 <button
