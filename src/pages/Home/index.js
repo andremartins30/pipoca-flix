@@ -163,9 +163,11 @@ const Home = () => {
                 <link rel="canonical" href={window.location.href} />
             </Helmet>
 
-            <AdsterraTopBanner />
+
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
+
+            <AdsterraTopBanner />
 
             <nav className='badges' aria-label="Categorias de filmes">
                 <button

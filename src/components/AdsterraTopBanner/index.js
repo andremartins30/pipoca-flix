@@ -2,39 +2,61 @@ import React, { useEffect } from 'react';
 import './adsterra-top-banner.css';
 
 const AdsterraTopBanner = () => {
-
     useEffect(() => {
-        const scriptOptions = document.createElement('script');
-        scriptOptions.type = 'text/javascript';
-        scriptOptions.innerHTML = `
-            atOptions = {
-                'key' : '6ebf48f2af8544eb09fc914558246433',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
+        const loadAdsterraScript = () => {
+            // Remove scripts existentes
+            const existingScripts = document.querySelectorAll('script[src*="highperformanceformat.com"]');
+            existingScripts.forEach(script => script.remove());
+
+            // Remove configurações existentes
+            if (window.atOptions) {
+                delete window.atOptions;
+            }
+
+            // Cria o container do banner
+            const container = document.getElementById('adsterra-top-banner-container');
+            if (container) {
+                container.innerHTML = '';
+            }
+
+            // Adiciona a configuração
+            window.atOptions = {
+                'key': 'dd8218a0080f0b1d7bd07abb38ca6316',
+                'format': 'iframe',
+                'height': 50,
+                'width': 320,
+                'params': {}
             };
-        `;
 
-        const scriptInvoke = document.createElement('script');
-        scriptInvoke.type = 'text/javascript';
-        scriptInvoke.src = '//www.highperformanceformat.com/6ebf48f2af8544eb09fc914558246433/invoke.js';
+            // Cria e adiciona o script
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = '//www.highperformanceformat.com/dd8218a0080f0b1d7bd07abb38ca6316/invoke.js';
+            script.async = true;
+            script.defer = true;
 
-        const adContainer = document.getElementById('adsterra-top-banner-container');
-        if (adContainer) {
-            adContainer.appendChild(scriptOptions);
-            adContainer.appendChild(scriptInvoke);
-        }
+            // Adiciona o script ao body em vez do head
+            document.body.appendChild(script);
+        };
+
+        // Carrega o script após um pequeno delay
+        const timer = setTimeout(loadAdsterraScript, 1000);
 
         return () => {
-            if (adContainer) {
-                adContainer.innerHTML = '';
+            clearTimeout(timer);
+            // Limpa scripts ao desmontar
+            const scripts = document.querySelectorAll('script[src*="highperformanceformat.com"]');
+            scripts.forEach(script => script.remove());
+            if (window.atOptions) {
+                delete window.atOptions;
             }
         };
     }, []);
 
     return (
-        <div id="adsterra-top-banner-container"></div>
+        <div id="adsterra-top-banner-container" className="adsterra-top-banner">
+            <div id="container-dd8218a0080f0b1d7bd07abb38ca6316"></div>
+        </div>
     );
 };
 

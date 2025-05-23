@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams, Link, useLocation } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { tmdbApi } from '../../services/api';
 import Skeleton from '../../components/Skeleton';
 import './search.css';

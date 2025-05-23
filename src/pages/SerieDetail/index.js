@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { tmdbApi } from '../../services/api';
 import './serieDetail.css';
 import { toast } from 'react-toastify';
-import SimilarMovies from '../../components/SimilarMovies';
 import AdsterraPopUnder from '../../components/AdsterraPopUnder';
 import AdsterraBanner from '../../components/AdsterraBanner';
 

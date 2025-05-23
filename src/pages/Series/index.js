@@ -7,6 +7,7 @@ import './series.css';
 import AdsterraBanner from '../../components/AdsterraBanner';
 import AdsterraContainer from '../../components/AdsterraContainer';
 import AdsterraTopBanner from '../../components/AdsterraTopBanner';
+import { Helmet } from 'react-helmet';
 
 const Series = () => {
     const [series, setSeries] = useState([]);
@@ -14,6 +15,59 @@ const Series = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [timeWindow, setTimeWindow] = useState('day');
+
+    const getPageTitle = (window) => {
+        const titles = {
+            day: 'Séries em Alta Hoje | PipocaFLIX',
+            week: 'Séries em Alta Esta Semana | PipocaFLIX'
+        };
+        return titles[window] || 'Séries em Alta | PipocaFLIX';
+    };
+
+    const getPageDescription = (window) => {
+        const descriptions = {
+            day: 'Descubra as séries mais populares do dia. Encontre os melhores títulos de TV com avaliações, sinopses e trailers.',
+            week: 'Confira as séries mais populares da semana. Uma seleção especial dos títulos mais assistidos e comentados.'
+        };
+        return descriptions[window] || 'PipocaFLIX - Sua plataforma para descobrir as melhores séries. Encontre séries populares com avaliações, sinopses e trailers.';
+    };
+
+    const getKeywords = (series) => {
+        const genres = series.reduce((acc, serie) => {
+            if (serie.genre_ids) {
+                serie.genre_ids.forEach(genreId => {
+                    const genre = getGenreName(genreId);
+                    if (genre && !acc.includes(genre)) {
+                        acc.push(genre);
+                    }
+                });
+            }
+            return acc;
+        }, []);
+
+        return ['séries', 'tv shows', 'streaming', 'séries populares', ...genres].join(', ');
+    };
+
+    const getGenreName = (genreId) => {
+        const genres = {
+            10759: 'Ação e Aventura',
+            16: 'Animação',
+            35: 'Comédia',
+            80: 'Crime',
+            99: 'Documentário',
+            18: 'Drama',
+            10751: 'Família',
+            10762: 'Infantil',
+            9648: 'Mistério',
+            10763: 'Notícias',
+            10764: 'Reality Show',
+            10765: 'Ficção Científica',
+            10766: 'Novela',
+            10767: 'Talk Show',
+            10768: 'Guerra e Política'
+        };
+        return genres[genreId];
+    };
 
     useEffect(() => {
         const loadSeries = async (pageNumber, window) => {
@@ -67,6 +121,7 @@ const Series = () => {
                 className="pagination-btn"
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
+                aria-label="Página anterior"
             >
                 {isMobile ? '<' : 'Anterior'}
             </button>
@@ -78,6 +133,7 @@ const Series = () => {
                     key={i}
                     className={`pagination-btn ${page === i ? 'active' : ''}`}
                     onClick={() => handlePageChange(i)}
+                    aria-label={`Ir para página ${i}`}
                 >
                     {i}
                 </button>
@@ -90,6 +146,7 @@ const Series = () => {
                 className="pagination-btn"
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
+                aria-label="Próxima página"
             >
                 {isMobile ? '>' : 'Próxima'}
             </button>
@@ -104,35 +161,59 @@ const Series = () => {
 
     return (
         <div className="container">
+            <Helmet>
+                <title>{getPageTitle(timeWindow)}</title>
+                <meta name="description" content={getPageDescription(timeWindow)} />
+                <meta name="keywords" content={getKeywords(series)} />
+                <meta property="og:title" content={getPageTitle(timeWindow)} />
+                <meta property="og:description" content={getPageDescription(timeWindow)} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={getPageTitle(timeWindow)} />
+                <meta name="twitter:description" content={getPageDescription(timeWindow)} />
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
+
             <AdsterraTopBanner />
 
-            <h1 className="page-title">PipocaFLIX - Séries em Alta</h1>
+            <header>
+                <h1 className="page-title">PipocaFLIX - Séries em Alta</h1>
+            </header>
 
-            <div className="badges">
+            <nav className="badges" aria-label="Filtro de período">
                 <button
                     className={`badge ${timeWindow === 'day' ? 'active' : ''}`}
                     onClick={() => handleTimeWindowChange('day')}
+                    aria-pressed={timeWindow === 'day'}
                 >Hoje</button>
                 <button
                     className={`badge ${timeWindow === 'week' ? 'active' : ''}`}
                     onClick={() => handleTimeWindowChange('week')}
+                    aria-pressed={timeWindow === 'week'}
                 >Esta Semana</button>
-            </div>
+            </nav>
 
-            <div className="lista-series">
+            <main className="lista-series">
                 {series.map((serie, index) => (
                     <React.Fragment key={serie.id}>
                         <article className="serie-card">
                             <div className="serie-poster">
-                                <span className="vote-average">{serie.vote_average.toFixed(2)}</span>
+                                <span className="vote-average" aria-label={`Avaliação: ${serie.vote_average.toFixed(2)}`}>
+                                    {serie.vote_average.toFixed(2)}
+                                </span>
                                 <img
                                     src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`}
-                                    alt={serie.name}
+                                    alt={`Poster da série ${serie.name}`}
                                     loading="lazy"
                                 />
                             </div>
                             <strong className="serie-title">{serie.name}</strong>
-                            <Link to={`/serie/${serie.id}`} className="btn-acessar">
+                            <Link
+                                to={`/serie/${serie.id}`}
+                                className="btn-acessar"
+                                aria-label={`Ver detalhes da série ${serie.name}`}
+                            >
                                 <span>Ver Detalhes</span>
                             </Link>
                         </article>
@@ -144,11 +225,11 @@ const Series = () => {
                         )}
                     </React.Fragment>
                 ))}
-            </div>
+            </main>
 
-            <div className="pagination">
+            <nav className="pagination" aria-label="Navegação de páginas">
                 {renderPaginationButtons()}
-            </div>
+            </nav>
 
             <div className="ad-bottom-container">
                 <AdsterraBanner />

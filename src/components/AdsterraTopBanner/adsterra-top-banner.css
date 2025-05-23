@@ -36,3 +36,29 @@ html[data-theme="dark"] .adsterra-top-banner-container {
         margin: 0 auto 1rem auto;
     }
 }
+
+.adsterra-top-banner {
+    width: 100%;
+    max-width: 320px;
+    height: 50px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    overflow: hidden;
+}
+
+#container-dd8218a0080f0b1d7bd07abb38ca6316 {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 320px) {
+    .adsterra-top-banner {
+        max-width: 100%;
+    }
+}
