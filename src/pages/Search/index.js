@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import api from '../../services/api';
+import { useSearchParams, Link, useLocation } from 'react-router-dom';
+import { tmdbApi } from '../../services/api';
 import Skeleton from '../../components/Skeleton';
 import './search.css';
 
@@ -10,18 +9,20 @@ const Search = () => {
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
     const query = searchParams.get('q');
+    const page = searchParams.get('page') || 1;
 
     const searchMovies = useCallback(async () => {
         if (!query) return;
 
         setLoading(true);
         try {
-            const response = await api.get('/search/movie', {
+            const response = await tmdbApi.get('search/multi', {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",
-                    query: query
-                }
+                    query: query,
+                    page: page,
+                },
             });
 
             // Ordena os filmes pela data de lançamento (mais recente para mais antigo)
@@ -37,7 +38,7 @@ const Search = () => {
         } finally {
             setLoading(false);
         }
-    }, [query]);
+    }, [query, page]);
 
     useEffect(() => {
         searchMovies();

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../../services/api';
+import { tmdbApi } from '../../services/api';
 import './similar-movies.css';
 
 const SimilarMovies = ({ movieId }) => {
@@ -8,14 +8,13 @@ const SimilarMovies = ({ movieId }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchSimilarMovies = async () => {
+        const loadSimilarMovies = async () => {
             try {
-                const response = await api.get(`/movie/${movieId}/similar`, {
+                const response = await tmdbApi.get(`movie/${movieId}/similar`, {
                     params: {
                         api_key: "45987c192cb22153a3fd72a71eee5003",
                         language: "pt-BR",
-                        page: 1
-                    }
+                    },
                 });
 
                 setSimilarMovies(response.data.results.slice(0, 6));
@@ -26,7 +25,7 @@ const SimilarMovies = ({ movieId }) => {
             }
         };
 
-        fetchSimilarMovies();
+        loadSimilarMovies();
     }, [movieId]);
 
     if (loading) {

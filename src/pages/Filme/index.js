@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import api from '../../services/api'
+import { tmdbApi } from '../../services/api'
 import './filme.css'
 import { toast } from 'react-toastify'
 import SimilarMovies from '../../components/SimilarMovies'
@@ -19,24 +19,25 @@ const Filme = () => {
     const [elenco, setElenco] = useState([]) // Estado para armazenar o elenco
 
     useEffect(() => {
-        async function loadFilme() {
-            await api.get(`/movie/${id}`, {
-                params: {
-                    api_key: "45987c192cb22153a3fd72a71eee5003",
-                    language: "pt-BR",
-                }
-            })
-                .then((response) => {
-                    setFilmes(response.data)
-                    setLoading(false)
-                }).catch(() => {
-                    navigate("/", { replace: true })
-                    return;
-                })
+        const loadFilme = async () => {
+            try {
+                setLoading(true);
+                const response = await tmdbApi.get(`movie/${id}`, {
+                    params: {
+                        api_key: "45987c192cb22153a3fd72a71eee5003",
+                        language: "pt-BR",
+                    },
+                });
+                setFilmes(response.data)
+                setLoading(false)
+            } catch (error) {
+                navigate("/", { replace: true })
+                return;
+            }
         }
 
         async function loadElenco() {
-            await api.get(`/movie/${id}/credits`, {
+            await tmdbApi.get(`/movie/${id}/credits`, {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",

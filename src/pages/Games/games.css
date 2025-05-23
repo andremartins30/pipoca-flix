@@ -1,0 +1,138 @@
+.lista-games {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.game-card {
+    background: #1a1a1a;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.game-card:hover {
+    transform: scale(1.05);
+}
+
+.game-poster {
+    position: relative;
+    width: 100%;
+    padding-top: 150%;
+}
+
+.game-poster img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.metacritic-score {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.metacritic-score.high {
+    background-color: #6c3;
+    color: #000;
+}
+
+.metacritic-score.medium {
+    background-color: #fc3;
+    color: #000;
+}
+
+.metacritic-score.low {
+    background-color: #f00;
+    color: #fff;
+}
+
+.game-title {
+    display: block;
+    padding: 10px;
+    color: #fff;
+    font-size: 16px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.game-info {
+    padding: 0 10px 10px;
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+}
+
+.game-platforms {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-acessar {
+    display: block;
+    background: #e50914;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.btn-acessar:hover {
+    background: #f40612;
+}
+
+.badges {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.badge {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.badge:hover {
+    background: #444;
+}
+
+.badge.active {
+    background: #e50914;
+}
+
+@media (max-width: 768px) {
+    .lista-games {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .game-title {
+        font-size: 14px;
+    }
+
+    .game-info {
+        font-size: 12px;
+    }
+}

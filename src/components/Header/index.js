@@ -39,7 +39,7 @@ const Header = () => {
                 <div className="nav-links desktop-only">
                     <Link to="/" className='nav-link'>Filmes</Link>
                     <Link to="/series" className='nav-link'>Séries</Link>
-                    <Link to="/cinemas" className='nav-link'>Games</Link>
+                    <Link to="/games" className='nav-link'>Games</Link>
                 </div>
 
                 <div className="nav-dropdown mobile-only">
@@ -47,7 +47,7 @@ const Header = () => {
                     <div className="nav-dropdown-menu">
                         <Link to="/" className='nav-link'>Filmes</Link>
                         <Link to="/series" className='nav-link'>Séries</Link>
-                        <Link to="/cinemas" className='nav-link'>Games</Link>
+                        <Link to="/games" className='nav-link'>Games</Link>
                     </div>
                 </div>
             </div>

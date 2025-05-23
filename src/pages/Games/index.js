@@ -1,46 +1,48 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { tmdbApi } from '../../services/api';
+import { rawgApi } from '../../services/api';
 import Skeleton from '../../components/Skeleton';
 import '../../styles/global.css';
-import './series.css';
+import './games.css';
 import AdsterraBanner from '../../components/AdsterraBanner';
 import AdsterraContainer from '../../components/AdsterraContainer';
 import AdsterraTopBanner from '../../components/AdsterraTopBanner';
 
-const Series = () => {
-    const [series, setSeries] = useState([]);
+const Games = () => {
+    const [games, setGames] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [timeWindow, setTimeWindow] = useState('day');
+    const [ordering, setOrdering] = useState('-metacritic');
 
     useEffect(() => {
-        const loadSeries = async (pageNumber, window) => {
+        const loadGames = async (pageNumber, order) => {
             try {
                 setLoading(true);
-                const response = await tmdbApi.get(`trending/tv/${window}`, {
+                const response = await rawgApi.get('games', {
                     params: {
-                        api_key: "45987c192cb22153a3fd72a71eee5003",
-                        language: "pt-BR",
+                        key: "b028504862e94a9696a210141ee95315",
                         page: pageNumber,
+                        page_size: 20,
+                        ordering: order,
+                        language: "pt-BR",
                     },
                 });
 
-                setSeries(response.data.results);
-                setTotalPages(response.data.total_pages);
+                setGames(response.data.results);
+                setTotalPages(Math.ceil(response.data.count / 20));
                 setLoading(false);
             } catch (error) {
-                console.error('Erro ao carregar séries:', error);
+                console.error('Erro ao carregar jogos:', error);
                 setLoading(false);
             }
         };
 
-        loadSeries(page, timeWindow);
-    }, [page, timeWindow]);
+        loadGames(page, ordering);
+    }, [page, ordering]);
 
-    const handleTimeWindowChange = (window) => {
-        setTimeWindow(window);
+    const handleOrderingChange = (order) => {
+        setOrdering(order);
         setPage(1);
     };
 
@@ -106,33 +108,46 @@ const Series = () => {
         <div className="container">
             <AdsterraTopBanner />
 
-            <h1 className="page-title">PipocaFLIX - Séries em Alta</h1>
+            <h1 className="page-title">PipocaFLIX - Jogos</h1>
 
             <div className="badges">
                 <button
-                    className={`badge ${timeWindow === 'day' ? 'active' : ''}`}
-                    onClick={() => handleTimeWindowChange('day')}
-                >Hoje</button>
+                    className={`badge ${ordering === '-metacritic' ? 'active' : ''}`}
+                    onClick={() => handleOrderingChange('-metacritic')}
+                >Mais Bem Avaliados</button>
                 <button
-                    className={`badge ${timeWindow === 'week' ? 'active' : ''}`}
-                    onClick={() => handleTimeWindowChange('week')}
-                >Esta Semana</button>
+                    className={`badge ${ordering === '-rating' ? 'active' : ''}`}
+                    onClick={() => handleOrderingChange('-rating')}
+                >Mais Populares</button>
+                <button
+                    className={`badge ${ordering === '-released' ? 'active' : ''}`}
+                    onClick={() => handleOrderingChange('-released')}
+                >Lançamentos</button>
             </div>
 
-            <div className="lista-series">
-                {series.map((serie, index) => (
-                    <React.Fragment key={serie.id}>
-                        <article className="serie-card">
-                            <div className="serie-poster">
-                                <span className="vote-average">{serie.vote_average.toFixed(2)}</span>
+            <div className="lista-games">
+                {games.map((game, index) => (
+                    <React.Fragment key={game.id}>
+                        <article className="game-card">
+                            <div className="game-poster">
+                                {game.metacritic && (
+                                    <span className={`metacritic-score ${game.metacritic >= 75 ? 'high' : game.metacritic >= 50 ? 'medium' : 'low'}`}>
+                                        {game.metacritic}
+                                    </span>
+                                )}
                                 <img
-                                    src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`}
-                                    alt={serie.name}
+                                    src={game.background_image}
+                                    alt={game.name}
                                     loading="lazy"
                                 />
                             </div>
-                            <strong className="serie-title">{serie.name}</strong>
-                            <Link to={`/serie/${serie.id}`} className="btn-acessar">
+                            <strong className="game-title">{game.name}</strong>
+                            <div className="game-info">
+                                <span className="game-platforms">
+                                    {game.platforms?.slice(0, 3).map(platform => platform.platform.name).join(', ')}
+                                </span>
+                            </div>
+                            <Link to={`/game/${game.id}`} className="btn-acessar">
                                 <span>Ver Detalhes</span>
                             </Link>
                         </article>
@@ -157,4 +172,4 @@ const Series = () => {
     );
 };
 
-export default Series;
+export default Games; 

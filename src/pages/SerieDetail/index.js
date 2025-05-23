@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../../services/api';
+import { tmdbApi } from '../../services/api';
 import './serieDetail.css';
 import { toast } from 'react-toastify';
 import SimilarMovies from '../../components/SimilarMovies';
@@ -15,9 +15,10 @@ const SerieDetail = () => {
     const [elenco, setElenco] = useState([]);
 
     useEffect(() => {
-        async function loadSerie() {
+        const loadSerie = async () => {
             try {
-                const response = await api.get(`/tv/${id}`, {
+                setLoading(true);
+                const response = await tmdbApi.get(`tv/${id}`, {
                     params: {
                         api_key: "45987c192cb22153a3fd72a71eee5003",
                         language: "pt-BR",
@@ -32,7 +33,7 @@ const SerieDetail = () => {
 
         async function loadElenco() {
             try {
-                const response = await api.get(`/tv/${id}/credits`, {
+                const response = await tmdbApi.get(`tv/${id}/credits`, {
                     params: {
                         api_key: "45987c192cb22153a3fd72a71eee5003",
                         language: "pt-BR",

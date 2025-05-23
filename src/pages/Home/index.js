@@ -1,8 +1,9 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import api from '../../services/api'
+import { tmdbApi } from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
+import { Helmet } from 'react-helmet'
 // import AdSense from '../../components/AdSense'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
@@ -18,6 +19,26 @@ const endpoints = {
     upcoming: 'movie/upcoming',
 }
 
+const getPageTitle = (activeList) => {
+    const titles = {
+        now_playing: 'Filmes em Cartaz | PipocaFLIX',
+        popular: 'Filmes Populares | PipocaFLIX',
+        top_rated: 'Filmes Mais Bem Avaliados | PipocaFLIX',
+        upcoming: 'Filmes em Breve | PipocaFLIX'
+    };
+    return titles[activeList] || 'PipocaFLIX - Sua Janela para o Cinema';
+};
+
+const getPageDescription = (activeList) => {
+    const descriptions = {
+        now_playing: 'Assista aos melhores filmes em cartaz. Encontre os lançamentos mais recentes do cinema com avaliações, sinopses e trailers.',
+        popular: 'Descubra os filmes mais populares do momento. Uma seleção especial dos títulos mais assistidos e comentados.',
+        top_rated: 'Confira os filmes mais bem avaliados pela crítica e pelo público. Uma curadoria especial dos melhores títulos do cinema.',
+        upcoming: 'Veja os próximos lançamentos do cinema. Fique por dentro dos filmes que estão chegando aos cinemas.'
+    };
+    return descriptions[activeList] || 'PipocaFLIX - Sua plataforma para descobrir os melhores filmes. Encontre lançamentos, filmes populares e mais bem avaliados com avaliações, sinopses e trailers.';
+};
+
 const Home = () => {
     const [filmes, setFilmes] = useState([])
     const [loading, setLoading] = useState(true)
@@ -28,7 +49,7 @@ const Home = () => {
     const loadFilmes = async (pageNumber, list) => {
         try {
             setLoading(true)
-            const response = await api.get(endpoints[list], {
+            const response = await tmdbApi.get(endpoints[list], {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",
@@ -71,75 +92,38 @@ const Home = () => {
             startPage = Math.max(1, endPage - maxVisiblePages + 1);
         }
 
-        // Botão "Anterior"
         buttons.push(
             <button
                 key="prev"
                 className="pagination-btn"
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
+                aria-label="Página anterior"
             >
                 {isMobile ? '<' : 'Anterior'}
             </button>
         );
 
-        // Primeira página (não mostrar em mobile se não for a página atual)
-        if (!isMobile || startPage === 1) {
-            buttons.push(
-                <button
-                    key="1"
-                    className={`pagination-btn ${page === 1 ? 'active' : ''}`}
-                    onClick={() => handlePageChange(1)}
-                >
-                    1
-                </button>
-            );
-        }
-
-        // Reticências iniciais (apenas em desktop)
-        if (!isMobile && startPage > 2) {
-            buttons.push(<span key="dots1" className="pagination-dots">...</span>);
-        }
-
-        // Páginas do meio
         for (let i = startPage; i <= endPage; i++) {
-            if (i === 1 || i === totalPages) continue; // Pular primeira e última página
             buttons.push(
                 <button
                     key={i}
                     className={`pagination-btn ${page === i ? 'active' : ''}`}
                     onClick={() => handlePageChange(i)}
+                    aria-label={`Ir para página ${i}`}
                 >
                     {i}
                 </button>
             );
         }
 
-        // Reticências finais (apenas em desktop)
-        if (!isMobile && endPage < totalPages - 1) {
-            buttons.push(<span key="dots2" className="pagination-dots">...</span>);
-        }
-
-        // Última página (não mostrar em mobile se não for a página atual)
-        if (!isMobile || endPage === totalPages) {
-            buttons.push(
-                <button
-                    key={totalPages}
-                    className={`pagination-btn ${page === totalPages ? 'active' : ''}`}
-                    onClick={() => handlePageChange(totalPages)}
-                >
-                    {totalPages}
-                </button>
-            );
-        }
-
-        // Botão "Próxima"
         buttons.push(
             <button
                 key="next"
                 className="pagination-btn"
                 onClick={() => handlePageChange(page + 1)}
                 disabled={page === totalPages}
+                aria-label="Próxima página"
             >
                 {isMobile ? '>' : 'Próxima'}
             </button>
@@ -165,45 +149,65 @@ const Home = () => {
 
     return (
         <div className='container'>
+            <Helmet>
+                <title>{getPageTitle(activeList)}</title>
+                <meta name="description" content={getPageDescription(activeList)} />
+                <meta name="keywords" content="filmes, cinema, streaming, lançamentos, filmes populares, filmes em cartaz, avaliações de filmes" />
+                <meta property="og:title" content={getPageTitle(activeList)} />
+                <meta property="og:description" content={getPageDescription(activeList)} />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content={window.location.href} />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={getPageTitle(activeList)} />
+                <meta name="twitter:description" content={getPageDescription(activeList)} />
+                <link rel="canonical" href={window.location.href} />
+            </Helmet>
+
             <AdsterraTopBanner />
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
-            <div className='badges'>
+            <nav className='badges' aria-label="Categorias de filmes">
                 <button
                     className={`badge ${activeList === 'now_playing' ? 'active' : ''}`}
                     onClick={() => handleBadgeClick('now_playing')}
+                    aria-pressed={activeList === 'now_playing'}
                 >Lançamentos</button>
                 <button
                     className={`badge ${activeList === 'popular' ? 'active' : ''}`}
                     onClick={() => handleBadgeClick('popular')}
+                    aria-pressed={activeList === 'popular'}
                 >Populares</button>
                 <button
                     className={`badge ${activeList === 'top_rated' ? 'active' : ''}`}
                     onClick={() => handleBadgeClick('top_rated')}
+                    aria-pressed={activeList === 'top_rated'}
                 >Mais bem avaliados</button>
                 <button
                     className={`badge ${activeList === 'upcoming' ? 'active' : ''}`}
                     onClick={() => handleBadgeClick('upcoming')}
+                    aria-pressed={activeList === 'upcoming'}
                 >Em breve</button>
-            </div>
+            </nav>
 
-            <div className="lista-filmes">
+            <main className="lista-filmes">
                 {filmes.map((filme, index) => (
                     <React.Fragment key={filme.id}>
                         <article className="filme-card">
                             <div className="filme-poster">
-                                <span className="vote-average">{filme.vote_average.toFixed(2)}</span>
+                                <span className="vote-average" aria-label={`Avaliação: ${filme.vote_average.toFixed(2)}`}>
+                                    {filme.vote_average.toFixed(2)}
+                                </span>
                                 <img
                                     src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
-                                    alt={filme.title}
+                                    alt={`Poster do filme ${filme.title}`}
                                     loading="lazy"
                                 />
                             </div>
                             <strong className="filme-title">
                                 {filme.title}
                             </strong>
-                            <Link to={`/filme/${filme.id}`} className="btn-acessar">
+                            <Link to={`/filme/${filme.id}`} className="btn-acessar" aria-label={`Ver detalhes do filme ${filme.title}`}>
                                 <span>Ver Detalhes</span>
                             </Link>
                         </article>
@@ -215,11 +219,11 @@ const Home = () => {
                         )}
                     </React.Fragment>
                 ))}
-            </div>
+            </main>
 
-            <div className="pagination">
+            <nav className="pagination" aria-label="Navegação de páginas">
                 {renderPaginationButtons()}
-            </div>
+            </nav>
 
             <div className="ad-bottom-container">
                 <AdsterraBanner />

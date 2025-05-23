@@ -12,6 +12,7 @@ const Search = lazy(() => import('./pages/Search'))
 const Cinemas = lazy(() => import('./pages/Cinemas'))
 const Series = lazy(() => import('./pages/Series'))
 const SerieDetail = lazy(() => import('./pages/SerieDetail'))
+const Games = lazy(() => import('./pages/Games'))
 
 // Componente de loading
 const Loading = () => <div>Carregando...</div>
@@ -41,6 +42,7 @@ function RoutesApp() {
                     <Route path='/favoritos' element={<Favoritos />} />
                     <Route path='/search' element={<Search />} />
                     <Route path='/cinemas' element={<Cinemas />} />
+                    <Route path='/games' element={<Games />} />
                     <Route path='*' element={<Erro />} />
                 </Routes>
             </Suspense>
