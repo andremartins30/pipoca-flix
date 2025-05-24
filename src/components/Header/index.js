@@ -48,10 +48,20 @@ const Header = () => {
 
     const handleDropdownClick = () => {
         setIsDropdownOpen(!isDropdownOpen)
+        if (isMenuOpen) setIsMenuOpen(false)
+    }
+
+    const handleMenuClick = () => {
+        setIsMenuOpen(!isMenuOpen)
+        if (isDropdownOpen) setIsDropdownOpen(false)
     }
 
     const handleDropdownItemClick = () => {
         setIsDropdownOpen(false)
+    }
+
+    const handleMenuItemClick = () => {
+        setIsMenuOpen(false)
     }
 
     return (
@@ -100,7 +110,7 @@ const Header = () => {
                 <div className="menu-container" ref={menuRef}>
                     <button
                         className="menu-button"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        onClick={handleMenuClick}
                         aria-label="Menu de opções"
                         aria-expanded={isMenuOpen}
                         aria-controls="options-menu"
@@ -113,14 +123,14 @@ const Header = () => {
                     </button>
 
                     {isMenuOpen && (
-                        <nav id="options-menu" className="dropdown-menu" aria-label="Menu de opções">
-                            <Link to="/" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/' ? 'page' : undefined}>
+                        <nav id="options-menu" className={`dropdown-menu ${isMenuOpen ? 'active' : ''}`} aria-label="Menu de opções">
+                            <Link to="/" onClick={handleMenuItemClick} aria-current={window.location.pathname === '/' ? 'page' : undefined}>
                                 Início
                             </Link>
-                            <Link to="/favoritos" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/favoritos' ? 'page' : undefined}>
+                            <Link to="/favoritos" onClick={handleMenuItemClick} aria-current={window.location.pathname === '/favoritos' ? 'page' : undefined}>
                                 Meus Filmes
                             </Link>
-                            <Link to="/cinemas" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/cinemas' ? 'page' : undefined}>
+                            <Link to="/cinemas" onClick={handleMenuItemClick} aria-current={window.location.pathname === '/cinemas' ? 'page' : undefined}>
                                 Cinemas Próximos
                             </Link>
                         </nav>
