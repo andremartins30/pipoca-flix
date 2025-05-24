@@ -1,14 +1,13 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { tmdbApi } from '../../services/api'
+import { rawgApi } from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
 import { Helmet } from 'react-helmet'
-// import AdSense from '../../components/AdSense'
+import ContentBlock from '../../components/ContentBlock'
 import './home.css'
 import AdsterraBanner from '../../components/AdsterraBanner'
 import AdsterraContainer from '../../components/AdsterraContainer'
-//import AdsterraPopUnder from '../../components/AdsterraPopUnder'
-// import AdsterraSideBanner from '../../components/AdsterraSideBanner'
 import AdsterraTopBanner from '../../components/AdsterraTopBanner'
 
 const endpoints = {
@@ -16,6 +15,7 @@ const endpoints = {
     popular: 'movie/popular',
     top_rated: 'movie/top_rated',
     upcoming: 'movie/upcoming',
+    popular_series: 'trending/tv/week'
 }
 
 const getPageTitle = (activeList) => {
@@ -40,107 +40,139 @@ const getPageDescription = (activeList) => {
 
 const Home = () => {
     const [filmes, setFilmes] = useState([])
+    const [series, setSeries] = useState([])
+    const [games, setGames] = useState([])
     const [loading, setLoading] = useState(true)
-    const [page, setPage] = useState(1)
-    const [totalPages, setTotalPages] = useState(1)
-    const [activeList, setActiveList] = useState('now_playing')
 
-    const loadFilmes = useCallback(async (pageNumber, list) => {
+    const loadContent = useCallback(async () => {
         try {
             setLoading(true)
-            const response = await tmdbApi.get(endpoints[list], {
+
+            // Carregar filmes
+            const filmesResponse = await tmdbApi.get(endpoints.now_playing, {
                 params: {
                     api_key: "45987c192cb22153a3fd72a71eee5003",
                     language: "pt-BR",
-                    page: pageNumber,
+                    page: 1,
                 }
             })
+            setFilmes(filmesResponse.data.results.slice(0, 20))
 
-            setFilmes(response.data.results)
-            setTotalPages(response.data.total_pages)
+            // Carregar séries
+            const seriesResponse = await tmdbApi.get(endpoints.popular_series, {
+                params: {
+                    api_key: "45987c192cb22153a3fd72a71eee5003",
+                    language: "pt-BR",
+                    page: 1,
+                }
+            })
+            setSeries(seriesResponse.data.results.slice(0, 10))
+
+            // Carregar games
+            try {
+                const gamesResponse = await rawgApi.get('games', {
+                    params: {
+                        key: "b028504862e94a9696a210141ee95315",
+                        page: 1,
+                        page_size: 10,
+                        language: "pt-BR",
+                    }
+                });
+                setGames(gamesResponse.data.results);
+            } catch (error) {
+                console.error('Erro ao carregar jogos:', error);
+                setGames([]);
+            }
+
             setLoading(false)
         } catch (error) {
-            console.error('Erro ao carregar filmes:', error)
+            console.error('Erro ao carregar conteúdo:', error)
             setLoading(false)
         }
     }, [])
 
     useEffect(() => {
-        loadFilmes(page, activeList)
-    }, [page, activeList, loadFilmes])
+        loadContent()
+    }, [loadContent])
 
-    const handleBadgeClick = useCallback((list) => {
-        setActiveList(list)
-        setPage(1)
-    }, [])
+    const renderFilme = (filme, index) => (
+        <React.Fragment key={filme.id}>
+            <article className="filme-card">
+                <div className="filme-poster">
+                    <span className="vote-average" aria-label={`Avaliação: ${filme.vote_average.toFixed(2)}`}>
+                        {filme.vote_average.toFixed(2)}
+                    </span>
+                    <img
+                        src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
+                        alt={`Poster do filme ${filme.title}`}
+                        loading="lazy"
+                        width="500"
+                        height="750"
+                    />
+                </div>
+                <strong className="filme-title">
+                    {filme.title}
+                </strong>
+                <Link to={`/filme/${filme.id}`} className="btn-acessar" aria-label={`Ver detalhes do filme ${filme.title}`}>
+                    <span>Ver Detalhes</span>
+                </Link>
+            </article>
+            {(index + 1) % 19 === 0 && (
+                <div>
+                    <AdsterraContainer />
+                </div>
+            )}
+        </React.Fragment>
+    )
 
-    const handlePageChange = useCallback((newPage) => {
-        setPage(newPage)
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }, [])
+    const renderSerie = (serie) => (
+        <article key={serie.id} className="filme-card">
+            <div className="filme-poster">
+                <span className="vote-average" aria-label={`Avaliação: ${serie.vote_average.toFixed(2)}`}>
+                    {serie.vote_average.toFixed(2)}
+                </span>
+                <img
+                    src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`}
+                    alt={`Poster da série ${serie.name}`}
+                    loading="lazy"
+                    width="500"
+                    height="750"
+                />
+            </div>
+            <strong className="filme-title">
+                {serie.name}
+            </strong>
+            <Link to={`/serie/${serie.id}`} className="btn-acessar" aria-label={`Ver detalhes da série ${serie.name}`}>
+                <span>Ver Detalhes</span>
+            </Link>
+        </article>
+    )
 
-    const renderPaginationButtons = useMemo(() => {
-        const buttons = [];
-        const isMobile = window.innerWidth <= 480;
-        const maxVisiblePages = isMobile ? 3 : 5;
-
-        let startPage = Math.max(1, page - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-        if (endPage - startPage + 1 < maxVisiblePages) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-
-        buttons.push(
-            <button
-                key="prev"
-                className="pagination-btn"
-                onClick={() => handlePageChange(page - 1)}
-                disabled={page === 1}
-                aria-label="Página anterior"
-            >
-                {isMobile ? '<' : 'Anterior'}
-            </button>
-        );
-
-        for (let i = startPage; i <= endPage; i++) {
-            buttons.push(
-                <button
-                    key={i}
-                    className={`pagination-btn ${page === i ? 'active' : ''}`}
-                    onClick={() => handlePageChange(i)}
-                    aria-label={`Ir para página ${i}`}
-                >
-                    {i}
-                </button>
-            );
-        }
-
-        buttons.push(
-            <button
-                key="next"
-                className="pagination-btn"
-                onClick={() => handlePageChange(page + 1)}
-                disabled={page === totalPages}
-                aria-label="Próxima página"
-            >
-                {isMobile ? '>' : 'Próxima'}
-            </button>
-        );
-
-        return buttons;
-    }, [page, totalPages, handlePageChange]);
-
-    // Adicionar listener para redimensionamento da janela
-    useEffect(() => {
-        const handleResize = () => {
-            // Força re-render quando a janela é redimensionada
-            setPage(prev => prev);
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const renderGame = (game) => (
+        <article key={game.id} className="filme-card">
+            <div className="filme-poster">
+                {game.metacritic && (
+                    <span className={`vote-average ${game.metacritic >= 75 ? 'high' : game.metacritic >= 50 ? 'medium' : 'low'}`}>
+                        {game.metacritic}
+                    </span>
+                )}
+                <img
+                    src={game.background_image}
+                    alt={game.name}
+                    loading="lazy"
+                />
+            </div>
+            <strong className="filme-title">{game.name}</strong>
+            <div className="game-info">
+                <span className="game-platforms">
+                    {game.platforms?.slice(0, 3).map(platform => platform.platform.name).join(', ')}
+                </span>
+            </div>
+            <Link to={`/game/${game.id}`} className="btn-acessar" aria-label={`Ver detalhes do jogo ${game.name}`}>
+                <span>Ver Detalhes</span>
+            </Link>
+        </article>
+    )
 
     if (loading) {
         return <Skeleton />
@@ -149,90 +181,53 @@ const Home = () => {
     return (
         <div className='container'>
             <Helmet>
-                <title>{getPageTitle(activeList)}</title>
-                <meta name="description" content={getPageDescription(activeList)} />
-                <meta name="keywords" content="filmes, cinema, streaming, lançamentos, filmes populares, filmes em cartaz, avaliações de filmes" />
-                <meta property="og:title" content={getPageTitle(activeList)} />
-                <meta property="og:description" content={getPageDescription(activeList)} />
+                <title>PipocaFLIX - Sua Janela para o Entretenimento</title>
+                <meta name="description" content="Descubra os melhores filmes, séries e jogos. Encontre lançamentos, títulos populares e mais bem avaliados com avaliações, sinopses e trailers." />
+                <meta name="keywords" content="filmes, séries, jogos, cinema, streaming, lançamentos, entretenimento" />
+                <meta property="og:title" content="PipocaFLIX - Sua Janela para o Entretenimento" />
+                <meta property="og:description" content="Descubra os melhores filmes, séries e jogos. Encontre lançamentos, títulos populares e mais bem avaliados com avaliações, sinopses e trailers." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content={window.location.href} />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={getPageTitle(activeList)} />
-                <meta name="twitter:description" content={getPageDescription(activeList)} />
                 <link rel="canonical" href={window.location.href} />
-                <link rel="preconnect" href="https://image.tmdb.org" />
             </Helmet>
 
-            <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
+            <h1 className="page-title">PipocaFLIX - Sua Janela para o Entretenimento</h1>
 
             <AdsterraTopBanner />
 
-            <nav className='badges' aria-label="Categorias de filmes">
-                <button
-                    className={`badge ${activeList === 'now_playing' ? 'active' : ''}`}
-                    onClick={() => handleBadgeClick('now_playing')}
-                    aria-pressed={activeList === 'now_playing'}
-                >Lançamentos</button>
-                <button
-                    className={`badge ${activeList === 'popular' ? 'active' : ''}`}
-                    onClick={() => handleBadgeClick('popular')}
-                    aria-pressed={activeList === 'popular'}
-                >Populares</button>
-                <button
-                    className={`badge ${activeList === 'top_rated' ? 'active' : ''}`}
-                    onClick={() => handleBadgeClick('top_rated')}
-                    aria-pressed={activeList === 'top_rated'}
-                >Mais bem avaliados</button>
-                <button
-                    className={`badge ${activeList === 'upcoming' ? 'active' : ''}`}
-                    onClick={() => handleBadgeClick('upcoming')}
-                    aria-pressed={activeList === 'upcoming'}
-                >Em breve</button>
-            </nav>
-
-            <main className="lista-filmes">
-                {filmes.map((filme, index) => (
+            <ContentBlock
+                title="Filmes em Destaque"
+                items={filmes}
+                linkTo="/filmes"
+                renderItem={(filme, index) => (
                     <React.Fragment key={filme.id}>
-                        <article className="filme-card">
-                            <div className="filme-poster">
-                                <span className="vote-average" aria-label={`Avaliação: ${filme.vote_average.toFixed(2)}`}>
-                                    {filme.vote_average.toFixed(2)}
-                                </span>
-                                <img
-                                    src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
-                                    alt={`Poster do filme ${filme.title}`}
-                                    loading="lazy"
-                                    width="500"
-                                    height="750"
-                                />
-                            </div>
-                            <strong className="filme-title">
-                                {filme.title}
-                            </strong>
-                            <Link to={`/filme/${filme.id}`} className="btn-acessar" aria-label={`Ver detalhes do filme ${filme.title}`}>
-                                <span>Ver Detalhes</span>
-                            </Link>
-                        </article>
-
-                        {(index + 1) % 16 === 0 && (
-                            <div>
+                        {renderFilme(filme)}
+                        {index === filmes.length - 1 && (
+                            <div className="adsterra-container">
                                 <AdsterraContainer />
                             </div>
                         )}
                     </React.Fragment>
-                ))}
-            </main>
+                )}
+            />
 
-            <nav className="pagination" aria-label="Navegação de páginas">
-                {renderPaginationButtons}
-            </nav>
+            <ContentBlock
+                title="Séries Populares"
+                items={series}
+                linkTo="/series"
+                renderItem={renderSerie}
+            />
+
+            <ContentBlock
+                title="Jogos em Alta"
+                items={games}
+                linkTo="/games"
+                renderItem={renderGame}
+            />
 
             <div className="ad-bottom-container">
                 <AdsterraBanner />
             </div>
-            {/* <div className="ad-sense-container">
-                <AdSense adSlot="1234567890" format="fluid" style={{ display: 'block' }} />
-            </div> */}
         </div>
     )
 }

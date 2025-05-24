@@ -80,7 +80,7 @@ const Header = () => {
                 </Link>
 
                 <nav className="nav-links desktop-only" aria-label="Menu principal">
-                    <Link to="/" className='nav-link' aria-current={window.location.pathname === '/' ? 'page' : undefined}>Filmes</Link>
+                    <Link to="/filmes" className='nav-link' aria-current={window.location.pathname === '/filmes' ? 'page' : undefined}>Filmes</Link>
                     <Link to="/series" className='nav-link' aria-current={window.location.pathname === '/series' ? 'page' : undefined}>Séries</Link>
                     <Link to="/games" className='nav-link' aria-current={window.location.pathname === '/games' ? 'page' : undefined}>Games</Link>
                 </nav>
@@ -96,7 +96,7 @@ const Header = () => {
                         ▼
                     </button>
                     <nav id="mobile-menu" className="nav-dropdown-menu" aria-label="Menu mobile">
-                        <Link to="/" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/' ? 'page' : undefined}>Filmes</Link>
+                        <Link to="/filmes" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/filmes' ? 'page' : undefined}>Filmes</Link>
                         <Link to="/series" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/series' ? 'page' : undefined}>Séries</Link>
                         <Link to="/games" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/games' ? 'page' : undefined}>Games</Link>
                     </nav>
