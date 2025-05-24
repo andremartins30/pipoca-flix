@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
 import { Helmet } from 'react-helmet'
 import './list-filmes.css'
+import AdsterraContainer from '../../components/AdsterraContainer'
 
 const endpoints = {
     now_playing: 'movie/now_playing',
@@ -158,27 +159,34 @@ const ListFilmes = () => {
             </nav>
 
             <main className="lista-filmes">
-                {filmes.map((filme) => (
-                    <article key={filme.id} className="filme-card">
-                        <div className="filme-poster">
-                            <span className="vote-average" aria-label={`Avaliação: ${filme.vote_average.toFixed(2)}`}>
-                                {filme.vote_average.toFixed(2)}
-                            </span>
-                            <img
-                                src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
-                                alt={`Poster do filme ${filme.title}`}
-                                loading="lazy"
-                                width="500"
-                                height="750"
-                            />
-                        </div>
-                        <strong className="filme-title">
-                            {filme.title}
-                        </strong>
-                        <Link to={`/filme/${filme.id}`} className="btn-acessar" aria-label={`Ver detalhes do filme ${filme.title}`}>
-                            <span>Ver Detalhes</span>
-                        </Link>
-                    </article>
+                {filmes.map((filme, index) => (
+                    <React.Fragment key={filme.id}>
+                        <article className="filme-card">
+                            <div className="filme-poster">
+                                <span className="vote-average" aria-label={`Avaliação: ${filme.vote_average.toFixed(2)}`}>
+                                    {filme.vote_average.toFixed(2)}
+                                </span>
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
+                                    alt={`Poster do filme ${filme.title}`}
+                                    loading="lazy"
+                                    width="500"
+                                    height="750"
+                                />
+                            </div>
+                            <strong className="filme-title">
+                                {filme.title}
+                            </strong>
+                            <Link to={`/filme/${filme.id}`} className="btn-acessar" aria-label={`Ver detalhes do filme ${filme.title}`}>
+                                <span>Ver Detalhes</span>
+                            </Link>
+                        </article>
+                        {(index + 1) % 19 === 0 && (
+                            <div className="ad-container">
+                                <AdsterraContainer />
+                            </div>
+                        )}
+                    </React.Fragment>
                 ))}
             </main>
 
