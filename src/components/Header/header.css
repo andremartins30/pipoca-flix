@@ -8,12 +8,16 @@ header {
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-height: 72px;
+    /* Altura mínima para evitar CLS */
 }
 
 .header-left {
     display: flex;
     align-items: center;
     gap: 1rem;
+    min-width: 0;
+    /* Evita overflow */
     /* Espaçamento entre a logo e o link de séries */
 }
 
@@ -22,6 +26,8 @@ header {
     align-items: center;
     text-decoration: none;
     transition: var(--transition);
+    min-width: 0;
+    /* Evita overflow */
 }
 
 .logo:hover {
@@ -32,6 +38,8 @@ header {
     width: 40px;
     height: 40px;
     margin-right: 0.8rem;
+    display: block;
+    /* Evita espaço extra abaixo da imagem */
 }
 
 .site-title {
@@ -41,6 +49,8 @@ header {
     color: var(--text-color);
     letter-spacing: 0.5px;
     transition: var(--transition);
+    white-space: nowrap;
+    /* Evita quebra de linha */
 }
 
 .nav-link {
@@ -73,6 +83,8 @@ header {
     justify-content: center;
     width: 40px;
     height: 40px;
+    min-width: 40px;
+    /* Evita CLS ao clicar */
 }
 
 .menu-icon {
@@ -107,8 +119,16 @@ header {
     padding: 0.5rem 0;
     min-width: 200px;
     margin-top: 0.5rem;
-    animation: slideDown 0.2s ease-out;
     z-index: 1001;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
+}
+
+.dropdown-menu:not(.active) {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .dropdown-menu a {
@@ -136,6 +156,11 @@ header {
     }
 }
 
+.nav-dropdown {
+    position: relative;
+    display: none;
+}
+
 .nav-dropdown-button {
     background: none;
     border: none;
@@ -147,10 +172,10 @@ header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem;
 }
 
 .nav-dropdown-menu {
-    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -160,10 +185,15 @@ header {
     padding: 0.5rem 0;
     min-width: 150px;
     z-index: 1001;
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
-.nav-dropdown:hover .nav-dropdown-menu {
-    display: block;
+.nav-dropdown-menu:not(.active) {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .nav-dropdown-menu a {
@@ -190,10 +220,6 @@ header {
 .nav-links {
     display: flex;
     gap: 1rem;
-}
-
-.nav-dropdown {
-    display: none;
 }
 
 /* Media Queries */

@@ -3,6 +3,8 @@
     min-height: 100vh;
     max-width: 1200px;
     margin: 0 auto;
+    contain: content;
+    /* Melhora performance de renderização */
 }
 
 .page-title {
@@ -12,6 +14,8 @@
     margin-bottom: 2rem;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    contain: layout;
+    /* Evita reflow */
 }
 
 .lista-filmes {
@@ -19,6 +23,8 @@
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2rem;
     margin: 0 auto;
+    contain: layout;
+    /* Evita reflow */
 }
 
 .filme-card {
@@ -27,11 +33,15 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow);
-    transition: var(--transition);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
+    contain: layout;
+    /* Evita reflow */
+    will-change: transform;
+    /* Otimiza animações */
 }
 
 html[data-theme="dark"] .filme-card {
@@ -65,6 +75,10 @@ html[data-theme="dark"] .filme-card {
     width: 100%;
     padding-top: 150%;
     overflow: hidden;
+    background-color: #f0f0f0;
+    /* Placeholder color */
+    contain: layout;
+    /* Evita reflow */
 }
 
 .filme-poster img {
@@ -75,6 +89,8 @@ html[data-theme="dark"] .filme-card {
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    will-change: transform;
+    /* Otimiza animações */
 }
 
 .filme-card:hover .filme-poster img {
@@ -93,6 +109,8 @@ html[data-theme="dark"] .filme-card {
     text-overflow: ellipsis;
     height: 3.2em;
     line-height: 1.4;
+    contain: content;
+    /* Melhora performance de renderização */
 }
 
 /* Estilo para o modo escuro
@@ -108,9 +126,11 @@ html[data-theme="dark"] .filme-card strong {
     text-decoration: none;
     text-align: center;
     font-weight: 500;
-    transition: var(--transition);
+    transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
+    contain: content;
+    /* Melhora performance de renderização */
 }
 
 .btn-acessar:hover {
@@ -139,6 +159,8 @@ html[data-theme="dark"] .filme-card strong {
     border-top: 4px solid var(--primary-color);
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    will-change: transform;
+    /* Otimiza animações */
 }
 
 @keyframes spin {
@@ -157,6 +179,8 @@ html[data-theme="dark"] .filme-card strong {
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+    contain: layout;
+    /* Evita reflow */
 }
 
 .badge {
@@ -168,7 +192,9 @@ html[data-theme="dark"] .filme-card strong {
     border: 2px solid var(--primary-color);
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    contain: content;
+    /* Melhora performance de renderização */
 }
 
 .badge.active {
@@ -291,6 +317,8 @@ html[data-theme="dark"] .filme-card strong {
     margin: 2rem 0;
     padding: 1rem;
     flex-wrap: wrap;
+    contain: layout;
+    /* Evita reflow */
 }
 
 .pagination-btn {
@@ -301,12 +329,16 @@ html[data-theme="dark"] .filme-card strong {
     border-radius: 5px;
     cursor: pointer;
     font-weight: 500;
-    transition: var(--transition);
+    transition: background-color 0.3s ease, transform 0.3s ease;
     min-width: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    contain: content;
+    /* Melhora performance de renderização */
+    will-change: transform;
+    /* Otimiza animações */
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -388,6 +420,10 @@ html[data-theme="dark"] .filme-card strong {
     justify-content: center;
     align-items: center;
     margin: 1rem 0;
+    min-height: 60px;
+    /* Altura mínima para evitar CLS */
+    contain: layout;
+    /* Evita reflow */
 }
 
 .ad-container {

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { tmdbApi } from '../../services/api'
 import { Link } from 'react-router-dom'
 import Skeleton from '../../components/Skeleton'
@@ -46,7 +45,7 @@ const Home = () => {
     const [totalPages, setTotalPages] = useState(1)
     const [activeList, setActiveList] = useState('now_playing')
 
-    const loadFilmes = async (pageNumber, list) => {
+    const loadFilmes = useCallback(async (pageNumber, list) => {
         try {
             setLoading(true)
             const response = await tmdbApi.get(endpoints[list], {
@@ -64,23 +63,23 @@ const Home = () => {
             console.error('Erro ao carregar filmes:', error)
             setLoading(false)
         }
-    }
+    }, [])
 
     useEffect(() => {
         loadFilmes(page, activeList)
-    }, [page, activeList])
+    }, [page, activeList, loadFilmes])
 
-    const handleBadgeClick = (list) => {
+    const handleBadgeClick = useCallback((list) => {
         setActiveList(list)
         setPage(1)
-    }
+    }, [])
 
-    const handlePageChange = (newPage) => {
+    const handlePageChange = useCallback((newPage) => {
         setPage(newPage)
         window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    }, [])
 
-    const renderPaginationButtons = () => {
+    const renderPaginationButtons = useMemo(() => {
         const buttons = [];
         const isMobile = window.innerWidth <= 480;
         const maxVisiblePages = isMobile ? 3 : 5;
@@ -130,7 +129,7 @@ const Home = () => {
         );
 
         return buttons;
-    };
+    }, [page, totalPages, handlePageChange]);
 
     // Adicionar listener para redimensionamento da janela
     useEffect(() => {
@@ -161,9 +160,8 @@ const Home = () => {
                 <meta name="twitter:title" content={getPageTitle(activeList)} />
                 <meta name="twitter:description" content={getPageDescription(activeList)} />
                 <link rel="canonical" href={window.location.href} />
+                <link rel="preconnect" href="https://image.tmdb.org" />
             </Helmet>
-
-
 
             <h1 className="page-title">PipocaFLIX - Sua Janela para o Cinema</h1>
 
@@ -204,6 +202,8 @@ const Home = () => {
                                     src={`https://image.tmdb.org/t/p/w500${filme.poster_path}`}
                                     alt={`Poster do filme ${filme.title}`}
                                     loading="lazy"
+                                    width="500"
+                                    height="750"
                                 />
                             </div>
                             <strong className="filme-title">
@@ -224,7 +224,7 @@ const Home = () => {
             </main>
 
             <nav className="pagination" aria-label="Navegação de páginas">
-                {renderPaginationButtons()}
+                {renderPaginationButtons}
             </nav>
 
             <div className="ad-bottom-container">

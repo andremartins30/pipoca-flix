@@ -5,10 +5,25 @@ import icon from './icon.png'
 import ThemeToggle from '../ThemeToggle'
 import SearchBar from '../SearchBar'
 
+// Preload da logo
+const preloadLogo = () => {
+    const link = document.createElement('link')
+    link.rel = 'preload'
+    link.as = 'image'
+    link.href = icon
+    document.head.appendChild(link)
+}
+
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const menuRef = useRef(null)
+    const dropdownRef = useRef(null)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        preloadLogo()
+    }, [])
 
     const handleSearch = (searchTerm) => {
         if (searchTerm.trim()) {
@@ -22,33 +37,59 @@ const Header = () => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
                 setIsMenuOpen(false)
             }
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsDropdownOpen(false)
+            }
         }
 
         document.addEventListener('mousedown', handleClickOutside)
         return () => document.removeEventListener('mousedown', handleClickOutside)
     }, [])
 
+    const handleDropdownClick = () => {
+        setIsDropdownOpen(!isDropdownOpen)
+    }
+
+    const handleDropdownItemClick = () => {
+        setIsDropdownOpen(false)
+    }
+
     return (
-        <header>
+        <header role="banner">
             <div className="header-left">
-                <Link className='logo' to='/'>
-                    <img src={icon} alt='icon' />
+                <Link className='logo' to='/' aria-label="PipocaFLIX - Página Inicial">
+                    <img
+                        src={icon}
+                        alt='Logo PipocaFLIX'
+                        width="40"
+                        height="40"
+                        loading="eager"
+                        fetchpriority="high"
+                    />
                     <span className="site-title">PipocaFLIX</span>
                 </Link>
 
-                <div className="nav-links desktop-only">
-                    <Link to="/" className='nav-link'>Filmes</Link>
-                    <Link to="/series" className='nav-link'>Séries</Link>
-                    <Link to="/games" className='nav-link'>Games</Link>
-                </div>
+                <nav className="nav-links desktop-only" aria-label="Menu principal">
+                    <Link to="/" className='nav-link' aria-current={window.location.pathname === '/' ? 'page' : undefined}>Filmes</Link>
+                    <Link to="/series" className='nav-link' aria-current={window.location.pathname === '/series' ? 'page' : undefined}>Séries</Link>
+                    <Link to="/games" className='nav-link' aria-current={window.location.pathname === '/games' ? 'page' : undefined}>Games</Link>
+                </nav>
 
-                <div className="nav-dropdown mobile-only">
-                    <button className="nav-dropdown-button">▼</button>
-                    <div className="nav-dropdown-menu">
-                        <Link to="/" className='nav-link'>Filmes</Link>
-                        <Link to="/series" className='nav-link'>Séries</Link>
-                        <Link to="/games" className='nav-link'>Games</Link>
-                    </div>
+                <div className={`nav-dropdown mobile-only ${isDropdownOpen ? 'active' : ''}`} ref={dropdownRef}>
+                    <button
+                        className="nav-dropdown-button"
+                        onClick={handleDropdownClick}
+                        aria-expanded={isDropdownOpen}
+                        aria-controls="mobile-menu"
+                        aria-label="Menu de navegação"
+                    >
+                        ▼
+                    </button>
+                    <nav id="mobile-menu" className="nav-dropdown-menu" aria-label="Menu mobile">
+                        <Link to="/" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/' ? 'page' : undefined}>Filmes</Link>
+                        <Link to="/series" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/series' ? 'page' : undefined}>Séries</Link>
+                        <Link to="/games" className='nav-link' onClick={handleDropdownItemClick} aria-current={window.location.pathname === '/games' ? 'page' : undefined}>Games</Link>
+                    </nav>
                 </div>
             </div>
 
@@ -60,9 +101,11 @@ const Header = () => {
                     <button
                         className="menu-button"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        aria-label="Menu"
+                        aria-label="Menu de opções"
+                        aria-expanded={isMenuOpen}
+                        aria-controls="options-menu"
                     >
-                        <div className="menu-icon">
+                        <div className="menu-icon" aria-hidden="true">
                             <span></span>
                             <span></span>
                             <span></span>
@@ -70,17 +113,17 @@ const Header = () => {
                     </button>
 
                     {isMenuOpen && (
-                        <div className="dropdown-menu">
-                            <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                        <nav id="options-menu" className="dropdown-menu" aria-label="Menu de opções">
+                            <Link to="/" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/' ? 'page' : undefined}>
                                 Início
                             </Link>
-                            <Link to="/favoritos" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/favoritos" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/favoritos' ? 'page' : undefined}>
                                 Meus Filmes
                             </Link>
-                            <Link to="/cinemas" onClick={() => setIsMenuOpen(false)}>
+                            <Link to="/cinemas" onClick={() => setIsMenuOpen(false)} aria-current={window.location.pathname === '/cinemas' ? 'page' : undefined}>
                                 Cinemas Próximos
                             </Link>
-                        </div>
+                        </nav>
                     )}
                 </div>
             </div>
