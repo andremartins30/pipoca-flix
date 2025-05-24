@@ -117,11 +117,6 @@ const Home = () => {
                     <span>Ver Detalhes</span>
                 </Link>
             </article>
-            {(index + 1) % 19 === 0 && (
-                <div>
-                    <AdsterraContainer />
-                </div>
-            )}
         </React.Fragment>
     )
 
@@ -199,16 +194,7 @@ const Home = () => {
                 title="Filmes em Destaque"
                 items={filmes}
                 linkTo="/filmes"
-                renderItem={(filme, index) => (
-                    <React.Fragment key={filme.id}>
-                        {renderFilme(filme)}
-                        {index === filmes.length - 1 && (
-                            <div className="adsterra-container">
-                                <AdsterraContainer />
-                            </div>
-                        )}
-                    </React.Fragment>
-                )}
+                renderItem={renderFilme}
             />
 
             <ContentBlock
@@ -224,6 +210,10 @@ const Home = () => {
                 linkTo="/games"
                 renderItem={renderGame}
             />
+
+            <div>
+                <AdsterraContainer />
+            </div>
 
             <div className="ad-bottom-container">
                 <AdsterraBanner />

@@ -59,15 +59,16 @@ html[data-theme="dark"] .filme-card {
     top: 10px;
     left: 10px;
     background-color: #ffdb0fce;
-    /* Laranja claro */
     color: white;
     font-size: 0.8rem;
     font-weight: bold;
-    padding: 5px;
+    padding: 5px 8px;
     border-radius: 3px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 10;
-    /* Garante que fique na frente */
+    min-width: 35px;
+    text-align: center;
+    display: inline-block;
 }
 
 .filme-poster {
